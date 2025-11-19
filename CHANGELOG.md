@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.1](https://github.com/robinnedergard/generated-react-test/compare/v1.0.0...v1.0.1) (2025-11-19)
+
+
+### Bug Fixes
+
+* added permissions ([#8](https://github.com/robinnedergard/generated-react-test/issues/8)) ([d13aae4](https://github.com/robinnedergard/generated-react-test/commit/d13aae4380ac67f435e78804237c1e8e4c4c4517))
+* attempt to fix ([ce93a56](https://github.com/robinnedergard/generated-react-test/commit/ce93a5604841fb6b7ebd55a595187e43bfeb0d09))
+* ci ([99833b6](https://github.com/robinnedergard/generated-react-test/commit/99833b6fa1a7c54fc17c9301b0501d3e3807f676))
+* fixing release versioning ([f5832e5](https://github.com/robinnedergard/generated-react-test/commit/f5832e59a2ee1d35294746be9f9b272f0bb57fb6))
+* test fixing ([4d7c10b](https://github.com/robinnedergard/generated-react-test/commit/4d7c10bcc802afe30ae7faad925181a49b7abbbe))
+* test version bump ([#7](https://github.com/robinnedergard/generated-react-test/issues/7)) ([4c531b2](https://github.com/robinnedergard/generated-react-test/commit/4c531b29821a5fe66a0ee85c3fc66e00b9ab76aa))
+
 # 1.0.0 (2025-11-19)
 
 
