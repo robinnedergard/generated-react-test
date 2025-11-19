@@ -6,8 +6,31 @@ on:
       - '*'
 
 jobs:
+  pr-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR title formatting
+        uses: amannn/action-semantic-pull-request@v5
+        with:
+          types: |
+            build
+            chore
+            ci
+            docs
+            feat
+            fix
+            perf
+            refactor
+            revert
+            style
+            test
+          requireScope: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   build:
     runs-on: ubuntu-latest
+    needs: pr-title
 
     steps:
       - name: Checkout repository
@@ -30,4 +53,3 @@ jobs:
 
       - name: Build
         run: npm run build
-
