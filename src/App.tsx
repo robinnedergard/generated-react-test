@@ -69,10 +69,29 @@ function ProductCard({
         </div>
         <button
           type="button"
-          className={`product-card__cta ${isHighlighted ? 'product-card__cta--pulse' : ''}`}
+          className={`product-card__cta ${isHighlighted ? 'product-card__cta--highlight' : ''}`}
           onClick={onAdd}
         >
           Add to bag
+          {isHighlighted && (
+            <span className="product-card__checkmark" aria-label="Added to bag">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M13.3333 4L6 11.3333L2.66667 8"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+          )}
         </button>
       </div>
     </article>
@@ -182,7 +201,7 @@ function App() {
       setHighlightedProduct((currentHighlight) =>
         currentHighlight?.token === token ? null : currentHighlight,
       )
-    }, 900)
+    }, 1200)
   }
 
   useEffect(() => {

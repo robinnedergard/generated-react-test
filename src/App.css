@@ -8,7 +8,8 @@
 }
 
 .hero {
-  background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.1)),
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.1)),
     var(--card);
   border-radius: 32px;
   display: grid;
@@ -65,7 +66,10 @@
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 200ms ease, box-shadow 200ms ease, background 200ms ease;
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease,
+    background 200ms ease;
 }
 
 .btn--primary {
@@ -152,7 +156,9 @@
   display: flex;
   flex-direction: column;
   min-height: 100%;
-  transition: transform 200ms ease, box-shadow 200ms ease;
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease;
 }
 
 .product-card__media {
@@ -233,7 +239,16 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-size: 0.75rem;
-  transition: transform 200ms ease, box-shadow 200ms ease;
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.product-card__cta--highlight {
+  animation: buttonColorFade 1200ms ease-out forwards;
 }
 
 .product-card--highlight {
@@ -241,10 +256,17 @@
   box-shadow: 0 10px 20px rgba(241, 84, 53, 0.08);
 }
 
-.product-card__cta--pulse {
-  animation: ctaPulse 500ms ease;
-  background: linear-gradient(120deg, rgba(241, 84, 53, 0.95), rgba(241, 84, 53, 0.8));
-  box-shadow: 0 8px 18px rgba(241, 84, 53, 0.18);
+.product-card__checkmark {
+  display: inline-flex;
+  align-items: center;
+  animation: checkmarkFade 1200ms ease-out forwards;
+  margin-right: -0.25rem;
+}
+
+.product-card__checkmark svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
 }
 
 @keyframes cardPulse {
@@ -262,15 +284,43 @@
   }
 }
 
-@keyframes ctaPulse {
+@keyframes checkmarkFade {
   0% {
-    transform: scale(1);
+    opacity: 0;
+    transform: translateX(-4px) scale(0.8);
   }
-  35% {
-    transform: scale(1.03);
+  20% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  70% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
   }
   100% {
-    transform: scale(1);
+    opacity: 0;
+    transform: translateX(4px) scale(0.8);
+  }
+}
+
+@keyframes buttonColorFade {
+  0% {
+    background-color: rgba(15, 23, 42, 0.85);
+  }
+  15% {
+    background-color: rgba(34, 197, 94, 0.9);
+  }
+  50% {
+    background-color: rgba(34, 197, 94, 0.9);
+  }
+  70% {
+    background-color: rgba(34, 197, 94, 0.75);
+  }
+  85% {
+    background-color: rgba(34, 197, 94, 0.5);
+  }
+  100% {
+    background-color: rgba(15, 23, 42, 0.85);
   }
 }
 
