@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/robinnedergard/generated-react-test/compare/v1.0.0...v1.0.1) (2025-11-20)
+
+
+### Bug Fixes
+
+* prompting for web shop ([#12](https://github.com/robinnedergard/generated-react-test/issues/12)) ([d00ead4](https://github.com/robinnedergard/generated-react-test/commit/d00ead44604f57e8763741abc92fc15c4adc0a86))
+
 # 1.0.0 (2025-11-20)
 
 
