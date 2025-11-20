@@ -24,6 +24,11 @@ export default function ProductPage({ onAddToCart, isHighlighted }: ProductPageP
     return products.find((p) => p.id === id)
   }, [id])
 
+  // Scroll to top when product page loads or product changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [id])
+
   useEffect(() => {
     if (!product) return
     const loadRating = () => {
