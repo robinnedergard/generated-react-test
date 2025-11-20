@@ -1,21 +1,39 @@
 import { describe, it, expect } from 'vitest'
 import '@testing-library/jest-dom/vitest'
 import { render, screen } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import userEvent from '@testing-library/user-event'
 import App from './App'
 import products from './data/products'
 
 describe('App', () => {
-  it('renders hero content and product cards', () => {
-    render(<App />)
+  it('renders hero content on home page', () => {
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <App />
+      </MemoryRouter>,
+    )
 
     expect(screen.getByRole('heading', { name: /modern home shop/i })).toBeInTheDocument()
+  })
+
+  it('renders product cards on products page', () => {
+    render(
+      <MemoryRouter initialEntries={['/products']}>
+        <App />
+      </MemoryRouter>,
+    )
+
     expect(screen.getAllByTestId('product-card')).toHaveLength(products.length)
   })
 
   it('adds items to the basket and adjusts quantities', async () => {
     const user = userEvent.setup()
-    render(<App />)
+    render(
+      <MemoryRouter initialEntries={['/products']}>
+        <App />
+      </MemoryRouter>,
+    )
 
     const addButtons = screen.getAllByRole('button', { name: /add to bag/i })
     await user.click(addButtons[0])
