@@ -14,6 +14,25 @@
 * change secret ([#5](https://github.com/robinnedergard/generated-react-test/issues/5)) ([2b7ee01](https://github.com/robinnedergard/generated-react-test/commit/2b7ee01f9a91692ddad80587fa8ed0737b930b5a))
 * ci ([89d310c](https://github.com/robinnedergard/generated-react-test/commit/89d310c06dda16d529b24fc4bf7682374c976a5c))
 * fixing release versioning ([b404773](https://github.com/robinnedergard/generated-react-test/commit/b4047737ddd20b1942ea9d40ebc5abf036f80799))
+* semantic version incorrect inverted bump ([#11](https://github.com/robinnedergard/generated-react-test/issues/11)) ([ff928bd](https://github.com/robinnedergard/generated-react-test/commit/ff928bd4b4def3c04574c9c37392d020d2394f25))
+* split ci steps ([#10](https://github.com/robinnedergard/generated-react-test/issues/10)) ([c4c34a6](https://github.com/robinnedergard/generated-react-test/commit/c4c34a699ac81550e0126b9bf574ea96de2ff271))
+* test fixing ([98e833b](https://github.com/robinnedergard/generated-react-test/commit/98e833b0596f66304b62cc21a0935b4fddf6740f))
+* test version bump ([#7](https://github.com/robinnedergard/generated-react-test/issues/7)) ([7ebb876](https://github.com/robinnedergard/generated-react-test/commit/7ebb876a2712aa78e1b80587f081c46f7b6834a6))
+
+# 1.0.0 (2025-11-20)
+
+
+### Bug Fixes
+
+* add version bumping ([#4](https://github.com/robinnedergard/generated-react-test/issues/4)) ([e0808e7](https://github.com/robinnedergard/generated-react-test/commit/e0808e761119065e6ddad5d100291997ce8e57f1))
+* added permissions ([#8](https://github.com/robinnedergard/generated-react-test/issues/8)) ([3d0037a](https://github.com/robinnedergard/generated-react-test/commit/3d0037ac76a22f634b31367e995a0d393e412036))
+* added pr naming requirements ([#3](https://github.com/robinnedergard/generated-react-test/issues/3)) ([7689d98](https://github.com/robinnedergard/generated-react-test/commit/7689d980b451187e06a79ba2df8911755a54c4e1))
+* added prod audit ci check ([#9](https://github.com/robinnedergard/generated-react-test/issues/9)) ([68a9ff4](https://github.com/robinnedergard/generated-react-test/commit/68a9ff4229f096000f7d1596cf5a9bf3d404020f))
+* attempt to fix ([a7590d1](https://github.com/robinnedergard/generated-react-test/commit/a7590d1440b0dbed66a9c21320f46b9d0597b92d))
+* attempt to fix ([#6](https://github.com/robinnedergard/generated-react-test/issues/6)) ([5c28b67](https://github.com/robinnedergard/generated-react-test/commit/5c28b67088f69f90e10b0ee447300dba9927c87b))
+* change secret ([#5](https://github.com/robinnedergard/generated-react-test/issues/5)) ([2b7ee01](https://github.com/robinnedergard/generated-react-test/commit/2b7ee01f9a91692ddad80587fa8ed0737b930b5a))
+* ci ([89d310c](https://github.com/robinnedergard/generated-react-test/commit/89d310c06dda16d529b24fc4bf7682374c976a5c))
+* fixing release versioning ([b404773](https://github.com/robinnedergard/generated-react-test/commit/b4047737ddd20b1942ea9d40ebc5abf036f80799))
 * split ci steps ([#10](https://github.com/robinnedergard/generated-react-test/issues/10)) ([c4c34a6](https://github.com/robinnedergard/generated-react-test/commit/c4c34a699ac81550e0126b9bf574ea96de2ff271))
 * test fixing ([98e833b](https://github.com/robinnedergard/generated-react-test/commit/98e833b0596f66304b62cc21a0935b4fddf6740f))
 * test version bump ([#7](https://github.com/robinnedergard/generated-react-test/issues/7)) ([7ebb876](https://github.com/robinnedergard/generated-react-test/commit/7ebb876a2712aa78e1b80587f081c46f7b6834a6))
