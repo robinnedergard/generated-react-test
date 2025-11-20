@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/robinnedergard/generated-react-test/compare/v1.0.1...v1.0.2) (2025-11-20)
+
+
+### Bug Fixes
+
+* added prod audit ci check ([#9](https://github.com/robinnedergard/generated-react-test/issues/9)) ([6ece278](https://github.com/robinnedergard/generated-react-test/commit/6ece2786d4db8c2d5cca1d36cc4dbf97ea6d9765))
+
 ## [1.0.1](https://github.com/robinnedergard/generated-react-test/compare/v1.0.0...v1.0.1) (2025-11-19)
 
 
