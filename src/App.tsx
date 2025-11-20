@@ -3,7 +3,7 @@ import { Link, Route, Routes } from 'react-router-dom'
 import './App.css'
 import products, { type Product } from './data/products'
 import ProductPage from './ProductPage'
-import { getAverageRating } from './utils/reviews'
+import ProductsPage from './ProductsPage'
 
 const currency = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -39,105 +39,16 @@ type CartLineItem = {
   quantity: number
 }
 
-function ProductCard({
-  product,
-  onAdd,
-  isHighlighted,
-}: {
-  product: Product
-  onAdd: () => void
-  isHighlighted: boolean
-}) {
-  const [averageRating, setAverageRating] = useState<number | null>(null)
-
-  useEffect(() => {
-    const loadRating = () => {
-      const rating = getAverageRating(product.id)
-      setAverageRating(rating)
-    }
-    loadRating()
-
-    const handleReviewAdded = () => {
-      const newRating = getAverageRating(product.id)
-      setAverageRating(newRating)
-    }
-
-    window.addEventListener('reviewAdded', handleReviewAdded)
-    return () => {
-      window.removeEventListener('reviewAdded', handleReviewAdded)
-    }
-  }, [product.id])
-
-  const handleAddClick = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    onAdd()
-  }
-
-  return (
-    <Link
-      to={`/product/${product.id}`}
-      className={`product-card ${isHighlighted ? 'product-card--highlight' : ''}`}
-      data-testid="product-card"
-    >
-      <div className="product-card__media">
-        <img src={product.image} alt={product.name} loading="lazy" />
-        {product.badge && <span className="product-card__badge">{product.badge}</span>}
-      </div>
-      <div className="product-card__body">
-        <p className="product-card__category">{product.category}</p>
-        <h3>{product.name}</h3>
-        <p className="product-card__description">{product.description}</p>
-        <div className="product-card__meta">
-          <span className="product-card__price">{currency.format(product.price)}</span>
-          {averageRating !== null && (
-            <span className="product-card__rating">★ {averageRating.toFixed(1)}</span>
-          )}
-        </div>
-        <div className="product-card__colors">
-          {product.colors.map((color) => (
-            <span key={color}>{color}</span>
-          ))}
-        </div>
-        <button
-          type="button"
-          className={`product-card__cta ${isHighlighted ? 'product-card__cta--highlight' : ''}`}
-          onClick={handleAddClick}
-        >
-          Add to bag
-          {isHighlighted && (
-            <span className="product-card__checkmark" aria-label="Added to bag">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M13.3333 4L6 11.3333L2.66667 8"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
-          )}
-        </button>
-      </div>
-    </Link>
-  )
-}
-
 function CartLine({
   item,
   onIncrement,
   onDecrement,
+  onRemove,
 }: {
   item: CartLineItem
   onIncrement: () => void
   onDecrement: () => void
+  onRemove: () => void
 }) {
   return (
     <li className="cart-line">
@@ -146,23 +57,47 @@ function CartLine({
         <span>{currency.format(item.product.price)}</span>
       </div>
       <div className="cart-line__controls">
-        <div className="quantity" aria-label={`Quantity controls for ${item.product.name}`}>
+        <div className="cart-line__quantity-group">
+          <div className="quantity" aria-label={`Quantity controls for ${item.product.name}`}>
+            <button
+              type="button"
+              aria-label={`Decrease quantity for ${item.product.name}`}
+              onClick={onDecrement}
+            >
+              –
+            </button>
+            <span data-testid={`cart-qty-${item.product.id}`} aria-live="polite">
+              {item.quantity}
+            </span>
+            <button
+              type="button"
+              aria-label={`Increase quantity for ${item.product.name}`}
+              onClick={onIncrement}
+            >
+              +
+            </button>
+          </div>
           <button
             type="button"
-            aria-label={`Decrease quantity for ${item.product.name}`}
-            onClick={onDecrement}
+            className="cart-line__remove"
+            aria-label={`Remove all ${item.product.name} from cart`}
+            onClick={onRemove}
           >
-            –
-          </button>
-          <span data-testid={`cart-qty-${item.product.id}`} aria-live="polite">
-            {item.quantity}
-          </span>
-          <button
-            type="button"
-            aria-label={`Increase quantity for ${item.product.name}`}
-            onClick={onIncrement}
-          >
-            +
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M2 4h12M5.333 4V2.667a1.333 1.333 0 0 1 1.334-1.334h2.666a1.333 1.333 0 0 1 1.334 1.334V4m2 0v9.333a1.333 1.333 0 0 1-1.334 1.334H4.667a1.333 1.333 0 0 1-1.334-1.334V4h9.334ZM6.667 7.333v4M9.333 7.333v4"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </button>
         </div>
         <span className="cart-line__total">
@@ -240,6 +175,7 @@ function Layout({
                   item={item}
                   onIncrement={() => updateQuantity(item.product.id, (qty) => qty + 1)}
                   onDecrement={() => updateQuantity(item.product.id, (qty) => qty - 1)}
+                  onRemove={() => updateQuantity(item.product.id, () => 0)}
                 />
               ))}
             </ul>
@@ -269,13 +205,7 @@ function Layout({
   )
 }
 
-function HomePage({
-  addToCart,
-  isHighlighted,
-}: {
-  addToCart: (productId: string) => void
-  isHighlighted: (productId: string) => boolean
-}) {
+function HomePage() {
   return (
     <>
       <header className="hero">
@@ -286,9 +216,9 @@ function HomePage({
             Curated furniture, lighting, and objects crafted in small batches and ready to ship.
           </p>
           <div className="hero__actions">
-            <a className="btn btn--primary" href="#collection">
+            <Link to="/products" className="btn btn--primary">
               Shop the collection
-            </a>
+            </Link>
             <button
               type="button"
               className="btn btn--ghost"
@@ -330,26 +260,6 @@ function HomePage({
               <h3>{category.category}</h3>
               <p>{category.count} curated pieces</p>
             </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="product-grid" id="collection">
-        <div className="section-heading">
-          <p className="eyebrow">Featured pieces</p>
-          <h2>Crafted to layer beautifully</h2>
-          <p>
-            Mix tactile fabrics, natural woods, and sculptural silhouettes for your signature look.
-          </p>
-        </div>
-        <div className="product-grid__items">
-          {products.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              onAdd={() => addToCart(product.id)}
-              isHighlighted={isHighlighted(product.id)}
-            />
           ))}
         </div>
       </section>
@@ -430,16 +340,36 @@ function App() {
 
   const addToCart = (productId: string) => {
     updateQuantity(productId, (current) => current + 1)
-    const token = ++highlightSequenceRef.current
-    setHighlightedProduct({ id: productId, token })
+
+    // Clear any existing timeout
     if (highlightTimeoutRef.current) {
       clearTimeout(highlightTimeoutRef.current)
+      highlightTimeoutRef.current = null
     }
-    highlightTimeoutRef.current = window.setTimeout(() => {
-      setHighlightedProduct((currentHighlight) =>
-        currentHighlight?.token === token ? null : currentHighlight,
-      )
-    }, 1200)
+
+    // If this product is already highlighted, briefly remove the highlight to restart the animation
+    if (highlightedProduct?.id === productId) {
+      setHighlightedProduct(null)
+      // Use setTimeout with 0ms to ensure the state update is processed before re-adding
+      setTimeout(() => {
+        const token = ++highlightSequenceRef.current
+        setHighlightedProduct({ id: productId, token })
+        highlightTimeoutRef.current = window.setTimeout(() => {
+          setHighlightedProduct((currentHighlight) =>
+            currentHighlight?.token === token ? null : currentHighlight,
+          )
+        }, 1200)
+      }, 0)
+    } else {
+      // First time highlighting this product
+      const token = ++highlightSequenceRef.current
+      setHighlightedProduct({ id: productId, token })
+      highlightTimeoutRef.current = window.setTimeout(() => {
+        setHighlightedProduct((currentHighlight) =>
+          currentHighlight?.token === token ? null : currentHighlight,
+        )
+      }, 1200)
+    }
   }
 
   useEffect(() => {
@@ -470,7 +400,25 @@ function App() {
             toggleCart={toggleCart}
             updateQuantity={updateQuantity}
           >
-            <HomePage addToCart={addToCart} isHighlighted={isHighlighted} />
+            <HomePage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/products"
+        element={
+          <Layout
+            cartItems={cartItems}
+            cartCount={cartCount}
+            subtotal={subtotal}
+            shipping={shipping}
+            total={total}
+            freeShippingMessage={freeShippingMessage}
+            isCartOpen={isCartOpen}
+            toggleCart={toggleCart}
+            updateQuantity={updateQuantity}
+          >
+            <ProductsPage addToCart={addToCart} isHighlighted={isHighlighted} />
           </Layout>
         }
       />

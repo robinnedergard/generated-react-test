@@ -84,8 +84,8 @@ export default function ProductPage({ onAddToCart, isHighlighted }: ProductPageP
   return (
     <div className="shop">
       <div className="product-page">
-        <Link to="/" className="product-page__back">
-          ← Back to shop
+        <Link to="/products" className="product-page__back">
+          ← Back to products
         </Link>
 
         <div className="product-page__content">

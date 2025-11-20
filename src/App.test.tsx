@@ -7,21 +7,30 @@ import App from './App'
 import products from './data/products'
 
 describe('App', () => {
-  it('renders hero content and product cards', () => {
+  it('renders hero content on home page', () => {
     render(
-      <MemoryRouter>
+      <MemoryRouter initialEntries={['/']}>
         <App />
       </MemoryRouter>,
     )
 
     expect(screen.getByRole('heading', { name: /modern home shop/i })).toBeInTheDocument()
+  })
+
+  it('renders product cards on products page', () => {
+    render(
+      <MemoryRouter initialEntries={['/products']}>
+        <App />
+      </MemoryRouter>,
+    )
+
     expect(screen.getAllByTestId('product-card')).toHaveLength(products.length)
   })
 
   it('adds items to the basket and adjusts quantities', async () => {
     const user = userEvent.setup()
     render(
-      <MemoryRouter>
+      <MemoryRouter initialEntries={['/products']}>
         <App />
       </MemoryRouter>,
     )
