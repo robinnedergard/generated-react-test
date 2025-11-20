@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { Link, Route, Routes } from 'react-router-dom'
 import './App.css'
 import products, { type Product } from './data/products'
+import ProductPage from './ProductPage'
+import { getAverageRating } from './utils/reviews'
 
 const currency = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -45,8 +48,35 @@ function ProductCard({
   onAdd: () => void
   isHighlighted: boolean
 }) {
+  const [averageRating, setAverageRating] = useState<number | null>(null)
+
+  useEffect(() => {
+    const loadRating = () => {
+      const rating = getAverageRating(product.id)
+      setAverageRating(rating)
+    }
+    loadRating()
+
+    const handleReviewAdded = () => {
+      const newRating = getAverageRating(product.id)
+      setAverageRating(newRating)
+    }
+
+    window.addEventListener('reviewAdded', handleReviewAdded)
+    return () => {
+      window.removeEventListener('reviewAdded', handleReviewAdded)
+    }
+  }, [product.id])
+
+  const handleAddClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    onAdd()
+  }
+
   return (
-    <article
+    <Link
+      to={`/product/${product.id}`}
       className={`product-card ${isHighlighted ? 'product-card--highlight' : ''}`}
       data-testid="product-card"
     >
@@ -60,7 +90,9 @@ function ProductCard({
         <p className="product-card__description">{product.description}</p>
         <div className="product-card__meta">
           <span className="product-card__price">{currency.format(product.price)}</span>
-          <span className="product-card__rating">★ {product.rating.toFixed(1)}</span>
+          {averageRating !== null && (
+            <span className="product-card__rating">★ {averageRating.toFixed(1)}</span>
+          )}
         </div>
         <div className="product-card__colors">
           {product.colors.map((color) => (
@@ -70,7 +102,7 @@ function ProductCard({
         <button
           type="button"
           className={`product-card__cta ${isHighlighted ? 'product-card__cta--highlight' : ''}`}
-          onClick={onAdd}
+          onClick={handleAddClick}
         >
           Add to bag
           {isHighlighted && (
@@ -94,7 +126,7 @@ function ProductCard({
           )}
         </button>
       </div>
-    </article>
+    </Link>
   )
 }
 
@@ -138,6 +170,212 @@ function CartLine({
         </span>
       </div>
     </li>
+  )
+}
+
+type LayoutProps = {
+  children: React.ReactNode
+  cartItems: CartLineItem[]
+  cartCount: number
+  subtotal: number
+  shipping: number
+  total: number
+  freeShippingMessage: string
+  isCartOpen: boolean
+  toggleCart: () => void
+  updateQuantity: (productId: string, updater: (current: number) => number) => void
+}
+
+function Layout({
+  children,
+  cartItems,
+  cartCount,
+  subtotal,
+  shipping,
+  total,
+  freeShippingMessage,
+  isCartOpen,
+  toggleCart,
+  updateQuantity,
+}: LayoutProps) {
+  return (
+    <div className="shop">
+      <div className="cart-bar">
+        <div>
+          <p className="eyebrow">Your bag</p>
+          <p>{cartCount ? `${cartCount} item${cartCount > 1 ? 's' : ''}` : 'No items yet'}</p>
+        </div>
+        <button
+          type="button"
+          className="cart-toggle"
+          onClick={toggleCart}
+          data-testid="cart-toggle"
+        >
+          Bag
+          <span className="cart-pill" data-testid="cart-count" aria-live="polite">
+            {cartCount}
+          </span>
+        </button>
+      </div>
+
+      {isCartOpen && (
+        <section className="cart-panel cart-panel--open" aria-live="polite">
+          <header className="cart-panel__header">
+            <div>
+              <p className="eyebrow">Shopping bag</p>
+              <h2>Ready to ship</h2>
+            </div>
+            <button type="button" className="btn btn--ghost btn--small" onClick={toggleCart}>
+              Hide
+            </button>
+          </header>
+          <p className="cart-panel__note">{freeShippingMessage}</p>
+          {cartItems.length === 0 ? (
+            <p className="cart-panel__empty">Your basket is empty – add your favorite finds.</p>
+          ) : (
+            <ul className="cart-panel__lines">
+              {cartItems.map((item) => (
+                <CartLine
+                  key={item.product.id}
+                  item={item}
+                  onIncrement={() => updateQuantity(item.product.id, (qty) => qty + 1)}
+                  onDecrement={() => updateQuantity(item.product.id, (qty) => qty - 1)}
+                />
+              ))}
+            </ul>
+          )}
+          <div className="cart-panel__summary">
+            <div className="cart-panel__summary-row">
+              <span>Subtotal</span>
+              <span>{currency.format(subtotal)}</span>
+            </div>
+            <div className="cart-panel__summary-row">
+              <span>Shipping</span>
+              <span>{shipping === 0 ? 'Complimentary' : currency.format(shipping)}</span>
+            </div>
+            <div className="cart-panel__summary-row cart-panel__summary-row--total">
+              <span>Total</span>
+              <span>{currency.format(total)}</span>
+            </div>
+            <button type="button" className="btn btn--primary btn--full">
+              Proceed to checkout
+            </button>
+          </div>
+        </section>
+      )}
+
+      {children}
+    </div>
+  )
+}
+
+function HomePage({
+  addToCart,
+  isHighlighted,
+}: {
+  addToCart: (productId: string) => void
+  isHighlighted: (productId: string) => boolean
+}) {
+  return (
+    <>
+      <header className="hero">
+        <div className="hero__content">
+          <p className="hero__eyebrow">New season edit</p>
+          <h1>Meet the modern home shop</h1>
+          <p className="hero__lead">
+            Curated furniture, lighting, and objects crafted in small batches and ready to ship.
+          </p>
+          <div className="hero__actions">
+            <a className="btn btn--primary" href="#collection">
+              Shop the collection
+            </a>
+            <button
+              type="button"
+              className="btn btn--ghost"
+              onClick={() =>
+                document.querySelector('#editorial')?.scrollIntoView({ behavior: 'smooth' })
+              }
+            >
+              Studio story
+            </button>
+          </div>
+          <div className="hero__meta">
+            <span>{currency.format(heroProduct.price)}</span>
+            <span>{heroProduct.name}</span>
+          </div>
+        </div>
+        <div className="hero__media">
+          <img src={heroProduct.image} alt={heroProduct.name} loading="lazy" />
+        </div>
+      </header>
+
+      <section className="perks">
+        {perks.map((perk) => (
+          <article key={perk.title}>
+            <h3>{perk.title}</h3>
+            <p>{perk.detail}</p>
+          </article>
+        ))}
+      </section>
+
+      <section className="categories">
+        <div className="section-heading">
+          <p className="eyebrow">Shop by room</p>
+          <h2>Spaces with intention</h2>
+          <p>Refresh a single corner or rethink your whole home with designer-backed palettes.</p>
+        </div>
+        <div className="categories__grid">
+          {categorySummaries.map((category) => (
+            <article key={category.category}>
+              <h3>{category.category}</h3>
+              <p>{category.count} curated pieces</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="product-grid" id="collection">
+        <div className="section-heading">
+          <p className="eyebrow">Featured pieces</p>
+          <h2>Crafted to layer beautifully</h2>
+          <p>
+            Mix tactile fabrics, natural woods, and sculptural silhouettes for your signature look.
+          </p>
+        </div>
+        <div className="product-grid__items">
+          {products.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              onAdd={() => addToCart(product.id)}
+              isHighlighted={isHighlighted(product.id)}
+            />
+          ))}
+        </div>
+      </section>
+
+      <section className="editorial" id="editorial">
+        <div className="editorial__media">
+          <img src={editorialHighlight.image} alt={editorialHighlight.name} loading="lazy" />
+        </div>
+        <div className="editorial__content">
+          <p className="eyebrow">From the studio</p>
+          <h2>Layered neutrals, elevated silhouettes</h2>
+          <p>
+            We partner with small-batch workshops to produce timeless staples. Every stitch, weave,
+            and finishing touch is considered so you can style once and enjoy for years.
+          </p>
+          <ul>
+            <li>Responsibly sourced materials and certified woods</li>
+            <li>Color stories developed with interior stylists</li>
+            <li>Transparent pricing and limited runs per season</li>
+          </ul>
+          <button type="button" className="btn btn--primary">
+            Book a design consult
+          </button>
+        </div>
+      </section>
+    </>
   )
 }
 
@@ -214,170 +452,47 @@ function App() {
 
   const toggleCart = () => setIsCartOpen((open) => !open)
 
+  const isHighlighted = (productId: string) => highlightedProduct?.id === productId
+
   return (
-    <div className="shop">
-      <div className="cart-bar">
-        <div>
-          <p className="eyebrow">Your bag</p>
-          <p>{cartCount ? `${cartCount} item${cartCount > 1 ? 's' : ''}` : 'No items yet'}</p>
-        </div>
-        <button
-          type="button"
-          className="cart-toggle"
-          onClick={toggleCart}
-          data-testid="cart-toggle"
-        >
-          Bag
-          <span className="cart-pill" data-testid="cart-count" aria-live="polite">
-            {cartCount}
-          </span>
-        </button>
-      </div>
-
-      {isCartOpen && (
-        <section className="cart-panel cart-panel--open" aria-live="polite">
-          <header className="cart-panel__header">
-            <div>
-              <p className="eyebrow">Shopping bag</p>
-              <h2>Ready to ship</h2>
-            </div>
-            <button type="button" className="btn btn--ghost btn--small" onClick={toggleCart}>
-              Hide
-            </button>
-          </header>
-          <p className="cart-panel__note">{freeShippingMessage}</p>
-          {cartItems.length === 0 ? (
-            <p className="cart-panel__empty">Your basket is empty – add your favorite finds.</p>
-          ) : (
-            <ul className="cart-panel__lines">
-              {cartItems.map((item) => (
-                <CartLine
-                  key={item.product.id}
-                  item={item}
-                  onIncrement={() => updateQuantity(item.product.id, (qty) => qty + 1)}
-                  onDecrement={() => updateQuantity(item.product.id, (qty) => qty - 1)}
-                />
-              ))}
-            </ul>
-          )}
-          <div className="cart-panel__summary">
-            <div className="cart-panel__summary-row">
-              <span>Subtotal</span>
-              <span>{currency.format(subtotal)}</span>
-            </div>
-            <div className="cart-panel__summary-row">
-              <span>Shipping</span>
-              <span>{shipping === 0 ? 'Complimentary' : currency.format(shipping)}</span>
-            </div>
-            <div className="cart-panel__summary-row cart-panel__summary-row--total">
-              <span>Total</span>
-              <span>{currency.format(total)}</span>
-            </div>
-            <button type="button" className="btn btn--primary btn--full">
-              Proceed to checkout
-            </button>
-          </div>
-        </section>
-      )}
-
-      <header className="hero">
-        <div className="hero__content">
-          <p className="hero__eyebrow">New season edit</p>
-          <h1>Meet the modern home shop</h1>
-          <p className="hero__lead">
-            Curated furniture, lighting, and objects crafted in small batches and ready to ship.
-          </p>
-          <div className="hero__actions">
-            <a className="btn btn--primary" href="#collection">
-              Shop the collection
-            </a>
-            <button
-              type="button"
-              className="btn btn--ghost"
-              onClick={() =>
-                document.querySelector('#editorial')?.scrollIntoView({ behavior: 'smooth' })
-              }
-            >
-              Studio story
-            </button>
-          </div>
-          <div className="hero__meta">
-            <span>{currency.format(heroProduct.price)}</span>
-            <span>{heroProduct.name}</span>
-          </div>
-        </div>
-        <div className="hero__media">
-          <img src={heroProduct.image} alt={heroProduct.name} loading="lazy" />
-        </div>
-      </header>
-
-      <section className="perks">
-        {perks.map((perk) => (
-          <article key={perk.title}>
-            <h3>{perk.title}</h3>
-            <p>{perk.detail}</p>
-          </article>
-        ))}
-      </section>
-
-      <section className="categories">
-        <div className="section-heading">
-          <p className="eyebrow">Shop by room</p>
-          <h2>Spaces with intention</h2>
-          <p>Refresh a single corner or rethink your whole home with designer-backed palettes.</p>
-        </div>
-        <div className="categories__grid">
-          {categorySummaries.map((category) => (
-            <article key={category.category}>
-              <h3>{category.category}</h3>
-              <p>{category.count} curated pieces</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="product-grid" id="collection">
-        <div className="section-heading">
-          <p className="eyebrow">Featured pieces</p>
-          <h2>Crafted to layer beautifully</h2>
-          <p>
-            Mix tactile fabrics, natural woods, and sculptural silhouettes for your signature look.
-          </p>
-        </div>
-        <div className="product-grid__items">
-          {products.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              onAdd={() => addToCart(product.id)}
-              isHighlighted={highlightedProduct?.id === product.id}
-            />
-          ))}
-        </div>
-      </section>
-
-      <section className="editorial" id="editorial">
-        <div className="editorial__media">
-          <img src={editorialHighlight.image} alt={editorialHighlight.name} loading="lazy" />
-        </div>
-        <div className="editorial__content">
-          <p className="eyebrow">From the studio</p>
-          <h2>Layered neutrals, elevated silhouettes</h2>
-          <p>
-            We partner with small-batch workshops to produce timeless staples. Every stitch, weave,
-            and finishing touch is considered so you can style once and enjoy for years.
-          </p>
-          <ul>
-            <li>Responsibly sourced materials and certified woods</li>
-            <li>Color stories developed with interior stylists</li>
-            <li>Transparent pricing and limited runs per season</li>
-          </ul>
-          <button type="button" className="btn btn--primary">
-            Book a design consult
-          </button>
-        </div>
-      </section>
-    </div>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Layout
+            cartItems={cartItems}
+            cartCount={cartCount}
+            subtotal={subtotal}
+            shipping={shipping}
+            total={total}
+            freeShippingMessage={freeShippingMessage}
+            isCartOpen={isCartOpen}
+            toggleCart={toggleCart}
+            updateQuantity={updateQuantity}
+          >
+            <HomePage addToCart={addToCart} isHighlighted={isHighlighted} />
+          </Layout>
+        }
+      />
+      <Route
+        path="/product/:id"
+        element={
+          <Layout
+            cartItems={cartItems}
+            cartCount={cartCount}
+            subtotal={subtotal}
+            shipping={shipping}
+            total={total}
+            freeShippingMessage={freeShippingMessage}
+            isCartOpen={isCartOpen}
+            toggleCart={toggleCart}
+            updateQuantity={updateQuantity}
+          >
+            <ProductPage onAddToCart={addToCart} isHighlighted={isHighlighted} />
+          </Layout>
+        }
+      />
+    </Routes>
   )
 }
 
