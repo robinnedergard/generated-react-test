@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/robinnedergard/generated-react-test/compare/v1.0.2...v1.0.3) (2025-11-20)
+
+
+### Bug Fixes
+
+* split ci steps ([#10](https://github.com/robinnedergard/generated-react-test/issues/10)) ([6fc3bdf](https://github.com/robinnedergard/generated-react-test/commit/6fc3bdf130b836f04b67cde72fff973454a1110c))
+
 ## [1.0.2](https://github.com/robinnedergard/generated-react-test/compare/v1.0.1...v1.0.2) (2025-11-20)
 
 
