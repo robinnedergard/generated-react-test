@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/robinnedergard/generated-react-test/compare/v1.0.1...v1.0.2) (2025-11-20)
+
+
+### Bug Fixes
+
+* continuation of ui ([#13](https://github.com/robinnedergard/generated-react-test/issues/13)) ([facabaf](https://github.com/robinnedergard/generated-react-test/commit/facabaf0d35bc24163590c0092633d4b7ef19fc8))
+
 ## [1.0.1](https://github.com/robinnedergard/generated-react-test/compare/v1.0.0...v1.0.1) (2025-11-20)
 
 
