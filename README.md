@@ -1,4 +1,4 @@
-This README is generated 
+This README is generated
 
 # React + TypeScript + Vite
 
