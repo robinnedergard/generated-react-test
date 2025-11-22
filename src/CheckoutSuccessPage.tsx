@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useQuery } from '@apollo/client/react'
 import './App.css'
 import { GET_CHECKOUT } from './graphql/queries'
@@ -77,9 +77,15 @@ export default function CheckoutSuccessPage({ onClearCart }: CheckoutSuccessPage
           <div className="checkout-page__empty">
             <h1>Checkout not found</h1>
             <p>Sorry, we couldn't find your checkout information.</p>
-            <Link to="/products" className="btn btn--primary">
+            <button
+              type="button"
+              className="btn btn--primary"
+              onClick={() => {
+                window.location.href = '/products'
+              }}
+            >
               Continue Shopping
-            </Link>
+            </button>
           </div>
         </div>
       </div>
@@ -130,9 +136,16 @@ export default function CheckoutSuccessPage({ onClearCart }: CheckoutSuccessPage
             </div>
           </div>
           <div className="checkout-page__success-actions">
-            <Link to="/products" className="btn btn--primary">
+            <button
+              type="button"
+              className="btn btn--primary"
+              onClick={() => {
+                // Direct navigation using window.location to ensure page updates
+                window.location.href = '/products'
+              }}
+            >
               Continue Shopping
-            </Link>
+            </button>
           </div>
         </div>
       </div>
