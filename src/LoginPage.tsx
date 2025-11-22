@@ -1,4 +1,4 @@
-import { useState, FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import { useNavigate, Link, useLocation } from 'react-router-dom'
 import { useAuth } from './contexts/AuthContext'
 import './App.css'
@@ -33,7 +33,10 @@ export default function LoginPage() {
     <div className="shop">
       <div className="checkout-page">
         <div className="checkout-page__content">
-          <div className="checkout-page__form-section" style={{ maxWidth: '500px', margin: '0 auto' }}>
+          <div
+            className="checkout-page__form-section"
+            style={{ maxWidth: '500px', margin: '0 auto' }}
+          >
             <h1 className="checkout-page__title">Login</h1>
 
             <form className="checkout-form" onSubmit={handleSubmit}>
@@ -96,4 +99,3 @@ export default function LoginPage() {
     </div>
   )
 }
-

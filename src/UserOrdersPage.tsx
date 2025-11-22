@@ -82,20 +82,25 @@ export default function UserOrdersPage() {
 
   if (error) {
     console.error('Error loading orders:', error)
+    const apolloError = error as {
+      message: string
+      networkError?: { message: string }
+      graphQLErrors?: Array<{ message: string }>
+    }
     return (
       <div className="shop">
         <div className="checkout-page">
           <div className="checkout-page__empty">
             <h1>Error loading orders</h1>
-            <p>{error.message}</p>
-            {error.networkError && (
+            <p>{apolloError.message}</p>
+            {apolloError.networkError && (
               <p style={{ color: '#ef4444', marginTop: '0.5rem' }}>
-                Network error: {error.networkError.message}
+                Network error: {apolloError.networkError.message}
               </p>
             )}
-            {error.graphQLErrors && error.graphQLErrors.length > 0 && (
+            {apolloError.graphQLErrors && apolloError.graphQLErrors.length > 0 && (
               <div style={{ marginTop: '0.5rem' }}>
-                {error.graphQLErrors.map((err, idx) => (
+                {apolloError.graphQLErrors.map((err: { message: string }, idx: number) => (
                   <p key={idx} style={{ color: '#ef4444' }}>
                     {err.message}
                   </p>

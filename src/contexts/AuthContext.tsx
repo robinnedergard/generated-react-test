@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { createContext, useContext, useState, type ReactNode } from 'react'
 
 interface User {
   id: string
@@ -21,28 +21,37 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
-  const [token, setToken] = useState<string | null>(null)
-  const [loading, setLoading] = useState(true)
+// Initialize state from localStorage
+function getInitialAuthState() {
+  const storedToken = localStorage.getItem('auth_token')
+  const storedUser = localStorage.getItem('auth_user')
 
-  useEffect(() => {
-    // Load token and user from localStorage on mount
-    const storedToken = localStorage.getItem('auth_token')
-    const storedUser = localStorage.getItem('auth_user')
-
-    if (storedToken && storedUser) {
-      try {
-        setToken(storedToken)
-        setUser(JSON.parse(storedUser))
-      } catch (error) {
-        console.error('Error parsing stored user:', error)
-        localStorage.removeItem('auth_token')
-        localStorage.removeItem('auth_user')
+  if (storedToken && storedUser) {
+    try {
+      return {
+        token: storedToken,
+        user: JSON.parse(storedUser) as User,
+        loading: false,
       }
+    } catch (error) {
+      console.error('Error parsing stored user:', error)
+      localStorage.removeItem('auth_token')
+      localStorage.removeItem('auth_user')
     }
-    setLoading(false)
-  }, [])
+  }
+
+  return {
+    token: null,
+    user: null,
+    loading: false,
+  }
+}
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const initialState = getInitialAuthState()
+  const [user, setUser] = useState<User | null>(initialState.user)
+  const [token, setToken] = useState<string | null>(initialState.token)
+  const [loading] = useState(initialState.loading)
 
   const login = async (email: string, password: string) => {
     const response = await fetch(`${BACKEND_URL}/auth/login`, {
@@ -67,12 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('auth_user', JSON.stringify(userData))
   }
 
-  const register = async (
-    email: string,
-    password: string,
-    firstName: string,
-    lastName: string,
-  ) => {
+  const register = async (email: string, password: string, firstName: string, lastName: string) => {
     const response = await fetch(`${BACKEND_URL}/auth/register`, {
       method: 'POST',
       headers: {
@@ -119,6 +123,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const context = useContext(AuthContext)
   if (context === undefined) {
@@ -126,4 +131,3 @@ export function useAuth() {
   }
   return context
 }
-
