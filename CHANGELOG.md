@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.1.0](https://github.com/robinnedergard/generated-react-test/compare/v1.0.2...v1.1.0) (2025-11-22)
+
+
+### Features
+
+* added base for checkout ([#14](https://github.com/robinnedergard/generated-react-test/issues/14)) ([1d1b7ba](https://github.com/robinnedergard/generated-react-test/commit/1d1b7bafe48b073a44f186b4052ceb9ca139124c))
+
 ## [1.0.2](https://github.com/robinnedergard/generated-react-test/compare/v1.0.1...v1.0.2) (2025-11-20)
 
 
