@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useQuery } from '@apollo/client/react'
 import './App.css'
 import ProductCard from './ProductCard'
@@ -16,12 +16,13 @@ type ProductsQueryResult = {
 }
 
 export default function ProductsPage({ addToCart, isHighlighted }: ProductsPageProps) {
+  const location = useLocation()
   const { loading, error, data } = useQuery<ProductsQueryResult>(GET_PRODUCTS)
 
-  // Scroll to top when products page loads
+  // Scroll to top when products page loads or location changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [])
+  }, [location.pathname])
 
   if (loading) return <div className="products-page">Loading products...</div>
   if (error) return <div className="products-page">Error loading products: {error.message}</div>

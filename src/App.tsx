@@ -7,6 +7,11 @@ import ProductPage from './ProductPage'
 import ProductsPage from './ProductsPage'
 import CheckoutPage from './CheckoutPage'
 import CheckoutSuccessPage from './CheckoutSuccessPage'
+import LoginPage from './LoginPage'
+import RegisterPage from './RegisterPage'
+import UserOrdersPage from './UserOrdersPage'
+import ProtectedRoute from './components/ProtectedRoute'
+import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { GET_PRODUCTS } from './graphql/queries'
 
 const currency = new Intl.NumberFormat('en-US', {
@@ -126,6 +131,8 @@ function Layout({
   toggleCart,
   updateQuantity,
 }: LayoutProps) {
+  const { isAuthenticated, user, logout } = useAuth()
+
   return (
     <div className="shop">
       <div className="cart-bar">
@@ -133,17 +140,54 @@ function Layout({
           <p className="eyebrow">Your bag</p>
           <p>{cartCount ? `${cartCount} item${cartCount > 1 ? 's' : ''}` : 'No items yet'}</p>
         </div>
-        <button
-          type="button"
-          className="cart-toggle"
-          onClick={toggleCart}
-          data-testid="cart-toggle"
-        >
-          Bag
-          <span className="cart-pill" data-testid="cart-count" aria-live="polite">
-            {cartCount}
-          </span>
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          {isAuthenticated ? (
+            <>
+              <Link
+                to="/account/orders"
+                style={{
+                  color: 'inherit',
+                  textDecoration: 'none',
+                  fontSize: '0.875rem',
+                  marginRight: '0.5rem',
+                }}
+              >
+                {user?.email}
+              </Link>
+              <button
+                type="button"
+                className="btn btn--ghost btn--small"
+                onClick={logout}
+                style={{ fontSize: '0.875rem' }}
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <Link
+              to="/login"
+              style={{
+                color: 'inherit',
+                textDecoration: 'none',
+                fontSize: '0.875rem',
+                marginRight: '0.5rem',
+              }}
+            >
+              Login
+            </Link>
+          )}
+          <button
+            type="button"
+            className="cart-toggle"
+            onClick={toggleCart}
+            data-testid="cart-toggle"
+          >
+            Bag
+            <span className="cart-pill" data-testid="cart-count" aria-live="polite">
+              {cartCount}
+            </span>
+          </button>
+        </div>
       </div>
 
       {isCartOpen && (
@@ -190,6 +234,7 @@ function Layout({
               to="/checkout"
               className="btn btn--primary btn--full"
               style={{ textAlign: 'center', display: 'block', textDecoration: 'none' }}
+              onClick={toggleCart}
             >
               Proceed to checkout
             </Link>
@@ -513,8 +558,72 @@ function App() {
           </Layout>
         }
       />
+      <Route
+        path="/login"
+        element={
+          <Layout
+            cartItems={cartItems}
+            cartCount={cartCount}
+            subtotal={subtotal}
+            shipping={shipping}
+            total={total}
+            freeShippingMessage={freeShippingMessage}
+            isCartOpen={isCartOpen}
+            toggleCart={toggleCart}
+            updateQuantity={updateQuantity}
+          >
+            <LoginPage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <Layout
+            cartItems={cartItems}
+            cartCount={cartCount}
+            subtotal={subtotal}
+            shipping={shipping}
+            total={total}
+            freeShippingMessage={freeShippingMessage}
+            isCartOpen={isCartOpen}
+            toggleCart={toggleCart}
+            updateQuantity={updateQuantity}
+          >
+            <RegisterPage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/account/orders"
+        element={
+          <Layout
+            cartItems={cartItems}
+            cartCount={cartCount}
+            subtotal={subtotal}
+            shipping={shipping}
+            total={total}
+            freeShippingMessage={freeShippingMessage}
+            isCartOpen={isCartOpen}
+            toggleCart={toggleCart}
+            updateQuantity={updateQuantity}
+          >
+            <ProtectedRoute>
+              <UserOrdersPage />
+            </ProtectedRoute>
+          </Layout>
+        }
+      />
     </Routes>
   )
 }
 
-export default App
+function AppWithAuth() {
+  return (
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  )
+}
+
+export default AppWithAuth
