@@ -24,6 +24,8 @@ type CheckoutQueryResult = {
       price: number
     }>
     shippingAddress: {
+      firstName: string
+      lastName: string
       address: string
       city: string
       state: string

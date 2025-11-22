@@ -64,10 +64,13 @@ export const GET_CHECKOUT = gql`
       total
       items {
         productId
+        name
         quantity
         price
       }
       shippingAddress {
+        firstName
+        lastName
         address
         city
         state
