@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/robinnedergard/generated-react-test/compare/v1.1.0...v1.1.1) (2025-11-22)
+
+
+### Bug Fixes
+
+* checkout fixes ([#15](https://github.com/robinnedergard/generated-react-test/issues/15)) ([c5c1a45](https://github.com/robinnedergard/generated-react-test/commit/c5c1a45104f88f8ba7e6c4c5fe475084a1fbe8d2))
+
 # [1.1.0](https://github.com/robinnedergard/generated-react-test/compare/v1.0.2...v1.1.0) (2025-11-22)
 
 
