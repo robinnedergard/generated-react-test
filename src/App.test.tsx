@@ -49,7 +49,7 @@ const mocks = [
 describe('App', () => {
   it('renders hero content on home page', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={['/']}>
           <App />
         </MemoryRouter>
@@ -63,7 +63,7 @@ describe('App', () => {
 
   it('renders product cards on products page', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={['/products']}>
           <App />
         </MemoryRouter>
@@ -80,7 +80,7 @@ describe('App', () => {
   it('adds items to the basket and adjusts quantities', async () => {
     const user = userEvent.setup()
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={['/products']}>
           <App />
         </MemoryRouter>
