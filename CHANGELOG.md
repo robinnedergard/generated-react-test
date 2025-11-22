@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.2.0](https://github.com/robinnedergard/generated-react-test/compare/v1.1.1...v1.2.0) (2025-11-22)
+
+
+### Features
+
+* login ([#16](https://github.com/robinnedergard/generated-react-test/issues/16)) ([40acac5](https://github.com/robinnedergard/generated-react-test/commit/40acac50579c727f7bcc90e7c68bee1c7b67b55f))
+
 ## [1.1.1](https://github.com/robinnedergard/generated-react-test/compare/v1.1.0...v1.1.1) (2025-11-22)
 
 
