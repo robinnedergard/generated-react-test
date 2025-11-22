@@ -1,9 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, Route, Routes } from 'react-router-dom'
+import { useQuery } from '@apollo/client/react'
 import './App.css'
-import products, { type Product } from './data/products'
+import { type Product } from './data/products'
 import ProductPage from './ProductPage'
 import ProductsPage from './ProductsPage'
+import CheckoutPage from './CheckoutPage'
+import CheckoutSuccessPage from './CheckoutSuccessPage'
+import { GET_PRODUCTS } from './graphql/queries'
 
 const currency = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -16,23 +20,12 @@ const perks = [
   { title: 'Design support', detail: 'Chat with stylists for pairing advice' },
 ]
 
-const categorySummaries = Object.entries(
-  products.reduce<Record<string, number>>((acc, product) => {
-    acc[product.category] = (acc[product.category] ?? 0) + 1
-    return acc
-  }, {}),
-)
-  .map(([category, count]) => ({ category, count }))
-  .sort((a, b) => b.count - a.count)
-
-const heroProduct = products[0]
-const editorialHighlight = products.find((product) => product.badge === 'Limited') ?? heroProduct
 const freeShippingThreshold = 150
 const flatShippingRate = 15
-const productDictionary = products.reduce<Record<string, Product>>((acc, product) => {
-  acc[product.id] = product
-  return acc
-}, {})
+
+type ProductsQueryResult = {
+  products: Product[]
+}
 
 type CartLineItem = {
   product: Product
@@ -193,9 +186,13 @@ function Layout({
               <span>Total</span>
               <span>{currency.format(total)}</span>
             </div>
-            <button type="button" className="btn btn--primary btn--full">
+            <Link
+              to="/checkout"
+              className="btn btn--primary btn--full"
+              style={{ textAlign: 'center', display: 'block', textDecoration: 'none' }}
+            >
               Proceed to checkout
-            </button>
+            </Link>
           </div>
         </section>
       )}
@@ -206,6 +203,25 @@ function Layout({
 }
 
 function HomePage() {
+  const { loading, data } = useQuery<ProductsQueryResult>(GET_PRODUCTS)
+  const products = data?.products || []
+
+  const categorySummaries = Object.entries(
+    products.reduce<Record<string, number>>((acc: Record<string, number>, product: Product) => {
+      acc[product.category] = (acc[product.category] ?? 0) + 1
+      return acc
+    }, {}),
+  )
+    .map(([category, count]) => ({ category, count: count as number }))
+    .sort((a, b) => b.count - a.count)
+
+  const heroProduct = products[0]
+  const editorialHighlight = products.find((product) => product.badge === 'Limited') ?? heroProduct
+
+  if (loading || !heroProduct) {
+    return <div>Loading...</div>
+  }
+
   return (
     <>
       <header className="hero">
@@ -299,6 +315,18 @@ function App() {
   const highlightTimeoutRef = useRef<number | null>(null)
   const highlightSequenceRef = useRef(0)
 
+  const { data: productsData } = useQuery<ProductsQueryResult>(GET_PRODUCTS)
+  const products = useMemo(() => productsData?.products || [], [productsData?.products])
+
+  const productDictionary = useMemo(
+    () =>
+      products.reduce<Record<string, Product>>((acc: Record<string, Product>, product: Product) => {
+        acc[product.id] = product
+        return acc
+      }, {}),
+    [products],
+  )
+
   const cartItems = useMemo<CartLineItem[]>(() => {
     return Object.entries(cart)
       .map(([productId, quantity]) => {
@@ -307,7 +335,7 @@ function App() {
         return { product, quantity }
       })
       .filter(Boolean) as CartLineItem[]
-  }, [cart])
+  }, [cart, productDictionary])
 
   const cartCount = useMemo(
     () => cartItems.reduce((total, item) => total + item.quantity, 0),
@@ -382,6 +410,10 @@ function App() {
 
   const toggleCart = () => setIsCartOpen((open) => !open)
 
+  const clearCart = () => {
+    setCart({})
+  }
+
   const isHighlighted = (productId: string) => highlightedProduct?.id === productId
 
   return (
@@ -437,6 +469,47 @@ function App() {
             updateQuantity={updateQuantity}
           >
             <ProductPage onAddToCart={addToCart} isHighlighted={isHighlighted} />
+          </Layout>
+        }
+      />
+      <Route
+        path="/checkout"
+        element={
+          <Layout
+            cartItems={cartItems}
+            cartCount={cartCount}
+            subtotal={subtotal}
+            shipping={shipping}
+            total={total}
+            freeShippingMessage={freeShippingMessage}
+            isCartOpen={isCartOpen}
+            toggleCart={toggleCart}
+            updateQuantity={updateQuantity}
+          >
+            <CheckoutPage
+              cartItems={cartItems}
+              subtotal={subtotal}
+              shipping={shipping}
+              total={total}
+            />
+          </Layout>
+        }
+      />
+      <Route
+        path="/checkout/:id/success"
+        element={
+          <Layout
+            cartItems={cartItems}
+            cartCount={cartCount}
+            subtotal={subtotal}
+            shipping={shipping}
+            total={total}
+            freeShippingMessage={freeShippingMessage}
+            isCartOpen={isCartOpen}
+            toggleCart={toggleCart}
+            updateQuantity={updateQuantity}
+          >
+            <CheckoutSuccessPage onClearCart={clearCart} />
           </Layout>
         }
       />

@@ -1,19 +1,32 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useQuery } from '@apollo/client/react'
 import './App.css'
-import products from './data/products'
 import ProductCard from './ProductCard'
+import { GET_PRODUCTS } from './graphql/queries'
+import type { Product } from './data/products'
 
 type ProductsPageProps = {
   addToCart: (productId: string) => void
   isHighlighted: (productId: string) => boolean
 }
 
+type ProductsQueryResult = {
+  products: Product[]
+}
+
 export default function ProductsPage({ addToCart, isHighlighted }: ProductsPageProps) {
+  const { loading, error, data } = useQuery<ProductsQueryResult>(GET_PRODUCTS)
+
   // Scroll to top when products page loads
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
+
+  if (loading) return <div className="products-page">Loading products...</div>
+  if (error) return <div className="products-page">Error loading products: {error.message}</div>
+
+  const products = data?.products || []
 
   return (
     <div className="products-page">
@@ -29,7 +42,7 @@ export default function ProductsPage({ addToCart, isHighlighted }: ProductsPageP
           </p>
         </div>
         <div className="product-grid__items">
-          {products.map((product) => (
+          {products.map((product: Product) => (
             <ProductCard
               key={product.id}
               product={product}

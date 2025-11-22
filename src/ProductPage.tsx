@@ -1,9 +1,11 @@
-import { useMemo, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { useQuery } from '@apollo/client/react'
 import './App.css'
-import products from './data/products'
 import Reviews from './Reviews'
 import { getAverageRating } from './utils/reviews'
+import { GET_PRODUCT } from './graphql/queries'
+import type { Product } from './data/products'
 
 const currency = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -15,14 +17,21 @@ type ProductPageProps = {
   isHighlighted: (productId: string) => boolean
 }
 
+type ProductQueryResult = {
+  product: Product | null
+}
+
 export default function ProductPage({ onAddToCart, isHighlighted }: ProductPageProps) {
   const { id } = useParams<{ id: string }>()
   const [selectedColor, setSelectedColor] = useState<string | null>(null)
   const [averageRating, setAverageRating] = useState<number | null>(null)
 
-  const product = useMemo(() => {
-    return products.find((p) => p.id === id)
-  }, [id])
+  const { loading, error, data } = useQuery<ProductQueryResult>(GET_PRODUCT, {
+    variables: { id: id || '' },
+    skip: !id,
+  })
+
+  const product = data?.product || null
 
   // Scroll to top when product page loads or product changes
   useEffect(() => {
@@ -57,15 +66,27 @@ export default function ProductPage({ onAddToCart, isHighlighted }: ProductPageP
     }
   }, [product])
 
-  if (!product) {
+  if (loading) {
+    return (
+      <div className="shop">
+        <div className="product-page">
+          <div className="product-page__not-found">
+            <h1>Loading...</h1>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (error || !product) {
     return (
       <div className="shop">
         <div className="product-page">
           <div className="product-page__not-found">
             <h1>Product not found</h1>
             <p>Sorry, we couldn't find the product you're looking for.</p>
-            <Link to="/" className="btn btn--primary">
-              Back to shop
+            <Link to="/products" className="btn btn--primary">
+              Back to products
             </Link>
           </div>
         </div>
@@ -109,7 +130,7 @@ export default function ProductPage({ onAddToCart, isHighlighted }: ProductPageP
             <div className="product-page__colors">
               <p className="product-page__colors-label">Available colors:</p>
               <div className="product-page__colors-list">
-                {product.colors.map((color) => (
+                {product.colors.map((color: string) => (
                   <button
                     key={color}
                     type="button"
