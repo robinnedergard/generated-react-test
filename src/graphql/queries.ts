@@ -82,3 +82,21 @@ export const GET_CHECKOUT = gql`
     }
   }
 `
+
+export const MY_ORDERS = gql`
+  query MyOrders {
+    myOrders {
+      id
+      status
+      total
+      items {
+        productId
+        name
+        quantity
+        price
+      }
+      paymentMethod
+      createdAt
+    }
+  }
+`
