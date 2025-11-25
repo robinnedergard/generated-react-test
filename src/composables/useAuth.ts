@@ -1,13 +1,13 @@
-import { createContext, useContext, useState, type ReactNode } from 'react'
+import { ref, computed, provide, inject, type InjectionKey } from 'vue'
 
-interface User {
+export interface User {
   id: string
   email: string
   firstName: string
   lastName: string
 }
 
-interface AuthContextType {
+interface AuthState {
   user: User | null
   token: string | null
   login: (email: string, password: string) => Promise<void>
@@ -17,7 +17,7 @@ interface AuthContextType {
   loading: boolean
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+const AuthKey: InjectionKey<AuthState> = Symbol('auth')
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'
 
@@ -47,11 +47,11 @@ function getInitialAuthState() {
   }
 }
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+export function provideAuth() {
   const initialState = getInitialAuthState()
-  const [user, setUser] = useState<User | null>(initialState.user)
-  const [token, setToken] = useState<string | null>(initialState.token)
-  const [loading] = useState(initialState.loading)
+  const user = ref<User | null>(initialState.user)
+  const token = ref<string | null>(initialState.token)
+  const loading = ref(initialState.loading)
 
   const login = async (email: string, password: string) => {
     const response = await fetch(`${BACKEND_URL}/auth/login`, {
@@ -70,8 +70,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const data = await response.json()
     const { access_token, user: userData } = data
 
-    setToken(access_token)
-    setUser(userData)
+    token.value = access_token
+    user.value = userData
     localStorage.setItem('auth_token', access_token)
     localStorage.setItem('auth_user', JSON.stringify(userData))
   }
@@ -93,41 +93,49 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const data = await response.json()
     const { access_token, user: userData } = data
 
-    setToken(access_token)
-    setUser(userData)
+    token.value = access_token
+    user.value = userData
     localStorage.setItem('auth_token', access_token)
     localStorage.setItem('auth_user', JSON.stringify(userData))
   }
 
   const logout = () => {
-    setToken(null)
-    setUser(null)
+    token.value = null
+    user.value = null
     localStorage.removeItem('auth_token')
     localStorage.removeItem('auth_user')
   }
 
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        token,
-        login,
-        register,
-        logout,
-        isAuthenticated: !!token && !!user,
-        loading,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  )
+  const isAuthenticated = computed(() => !!token.value && !!user.value)
+
+  // Provide reactive state
+  const authState: AuthState = {
+    get user() {
+      return user.value
+    },
+    get token() {
+      return token.value
+    },
+    get isAuthenticated() {
+      return isAuthenticated.value
+    },
+    get loading() {
+      return loading.value
+    },
+    login,
+    register,
+    logout,
+  }
+
+  provide(AuthKey, authState)
+
+  return authState
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
-export function useAuth() {
-  const context = useContext(AuthContext)
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider')
+export function useAuth(): AuthState {
+  const auth = inject(AuthKey)
+  if (!auth) {
+    throw new Error('useAuth must be used within a component that provides auth')
   }
-  return context
+  return auth
 }
