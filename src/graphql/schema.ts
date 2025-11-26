@@ -36,6 +36,24 @@ export const typeDefs = `#graphql
     createdAt: String!
   }
 
+  type Review {
+    id: ID!
+    productId: ID!
+    name: String
+    text: String!
+    rating: Int!
+    userName: String!
+    createdAt: String!
+    updatedAt: String!
+  }
+
+  input CreateReviewInput {
+    productId: ID!
+    text: String!
+    rating: Int!
+    name: String
+  }
+
   input CheckoutItemInput {
     productId: ID!
     quantity: Int!
@@ -62,10 +80,13 @@ export const typeDefs = `#graphql
     product(id: ID!): Product
     checkout(id: ID!): Checkout
     checkouts(status: String): [Checkout!]!
+    reviews(productId: ID!): [Review!]!
   }
 
   type Mutation {
     createCheckout(input: CheckoutInput!): Checkout!
     cancelCheckout(id: ID!): Checkout!
+    createReview(input: CreateReviewInput!): Review!
+    deleteReview(id: ID!): Boolean!
   }
 `

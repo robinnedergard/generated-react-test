@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import StarRating from './StarRating'
 import ErrorMessage from '../ErrorMessage'
+import { useAuth } from '../../contexts/AuthContext'
 
 function generateCaptcha() {
   const num1 = Math.floor(Math.random() * 10) + 1
@@ -9,13 +10,14 @@ function generateCaptcha() {
 }
 
 type ReviewFormProps = {
-  onSubmit: (review: { name: string; text: string; rating: number }) => Promise<void>
+  onSubmit: (review: { name?: string; text: string; rating: number }) => Promise<void>
   isSubmitting: boolean
   error: string
   onError: (error: string) => void
 }
 
 export default function ReviewForm({ onSubmit, isSubmitting, error, onError }: ReviewFormProps) {
+  const { isAuthenticated } = useAuth()
   const [name, setName] = useState('')
   const [text, setText] = useState('')
   const [rating, setRating] = useState(0)
@@ -26,7 +28,8 @@ export default function ReviewForm({ onSubmit, isSubmitting, error, onError }: R
     e.preventDefault()
     onError('')
 
-    if (!name.trim()) {
+    // Only require name if user is not authenticated
+    if (!isAuthenticated && !name.trim()) {
       onError('Please enter your name')
       return
     }
@@ -41,22 +44,31 @@ export default function ReviewForm({ onSubmit, isSubmitting, error, onError }: R
       return
     }
 
-    const answer = parseInt(captchaAnswer, 10)
-    if (isNaN(answer) || answer !== captcha.answer) {
-      onError('Incorrect captcha answer. Please try again.')
-      setCaptcha(generateCaptcha())
-      setCaptchaAnswer('')
-      return
+    // Only validate captcha if user is not authenticated
+    if (!isAuthenticated) {
+      const answer = parseInt(captchaAnswer, 10)
+      if (isNaN(answer) || answer !== captcha.answer) {
+        onError('Incorrect captcha answer. Please try again.')
+        setCaptcha(generateCaptcha())
+        setCaptchaAnswer('')
+        return
+      }
     }
 
     try {
-      await onSubmit({ name: name.trim(), text: text.trim(), rating })
+      await onSubmit({ 
+        name: isAuthenticated ? undefined : name.trim(), 
+        text: text.trim(), 
+        rating 
+      })
       // Reset form on success
       setName('')
       setText('')
       setRating(0)
-      setCaptchaAnswer('')
-      setCaptcha(generateCaptcha())
+      if (!isAuthenticated) {
+        setCaptchaAnswer('')
+        setCaptcha(generateCaptcha())
+      }
     } catch {
       // Error handling is done by parent component
     }
@@ -69,20 +81,22 @@ export default function ReviewForm({ onSubmit, isSubmitting, error, onError }: R
     >
       <h3 className="text-xl m-0">Write a review</h3>
 
-      <div className="flex flex-col gap-2">
-        <label htmlFor="review-name" className="text-sm font-semibold text-slate-900">
-          Your name
-        </label>
-        <input
-          id="review-name"
-          type="text"
-          className="px-4 py-3 border border-slate-200 rounded-xl text-base font-inherit bg-white text-slate-900 transition-colors focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100 disabled:opacity-60 disabled:cursor-not-allowed"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Enter your name"
-          disabled={isSubmitting}
-        />
-      </div>
+      {!isAuthenticated && (
+        <div className="flex flex-col gap-2">
+          <label htmlFor="review-name" className="text-sm font-semibold text-slate-900">
+            Your name
+          </label>
+          <input
+            id="review-name"
+            type="text"
+            className="px-4 py-3 border border-slate-200 rounded-xl text-base font-inherit bg-white text-slate-900 transition-colors focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-100 disabled:opacity-60 disabled:cursor-not-allowed"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Enter your name"
+            disabled={isSubmitting}
+          />
+        </div>
+      )}
 
       <div className="flex flex-col gap-2">
         <label className="text-sm font-semibold text-slate-900">Your rating</label>
@@ -104,20 +118,22 @@ export default function ReviewForm({ onSubmit, isSubmitting, error, onError }: R
         />
       </div>
 
-      <div className="flex flex-col gap-2">
-        <label htmlFor="review-captcha" className="text-sm font-semibold text-slate-900">
-          Verification: What is {captcha.question}?
-        </label>
-        <input
-          id="review-captcha"
-          type="text"
-          className="px-4 py-3 border border-slate-200 rounded-xl text-base font-inherit bg-white text-slate-900 transition-colors focus:outline-none focus:border-orange-500 focus:ring-3 focus:ring-orange-100 disabled:opacity-60 disabled:cursor-not-allowed max-w-[120px]"
-          value={captchaAnswer}
-          onChange={(e) => setCaptchaAnswer(e.target.value)}
-          placeholder="Enter answer"
-          disabled={isSubmitting}
-        />
-      </div>
+      {!isAuthenticated && (
+        <div className="flex flex-col gap-2">
+          <label htmlFor="review-captcha" className="text-sm font-semibold text-slate-900">
+            Verification: What is {captcha.question}?
+          </label>
+          <input
+            id="review-captcha"
+            type="text"
+            className="px-4 py-3 border border-slate-200 rounded-xl text-base font-inherit bg-white text-slate-900 transition-colors focus:outline-none focus:border-orange-500 focus:ring-3 focus:ring-orange-100 disabled:opacity-60 disabled:cursor-not-allowed max-w-[120px]"
+            value={captchaAnswer}
+            onChange={(e) => setCaptchaAnswer(e.target.value)}
+            placeholder="Enter answer"
+            disabled={isSubmitting}
+          />
+        </div>
+      )}
 
       {error && <ErrorMessage message={error} />}
 

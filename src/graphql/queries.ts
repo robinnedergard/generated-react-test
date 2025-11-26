@@ -100,3 +100,35 @@ export const MY_ORDERS = gql`
     }
   }
 `
+
+export const GET_REVIEWS = gql`
+  query GetReviews($productId: ID!) {
+    reviews(productId: $productId) {
+      id
+      productId
+      text
+      rating
+      userName
+      createdAt
+    }
+  }
+`
+
+export const CREATE_REVIEW = gql`
+  mutation CreateReview($createReviewInput: CreateReviewInput!) {
+    createReview(createReviewInput: $createReviewInput) {
+      id
+      productId
+      text
+      rating
+      userName
+      createdAt
+    }
+  }
+`
+
+export const DELETE_REVIEW = gql`
+  mutation DeleteReview($id: ID!) {
+    deleteReview(id: $id)
+  }
+`
