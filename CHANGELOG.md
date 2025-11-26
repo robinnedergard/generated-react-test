@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.4.0](https://github.com/robinnedergard/generated-react-test/compare/v1.3.1...v1.4.0) (2025-11-26)
+
+
+### Features
+
+* implemented support for getting product reviews ([#19](https://github.com/robinnedergard/generated-react-test/issues/19)) ([48bf0c5](https://github.com/robinnedergard/generated-react-test/commit/48bf0c566c1fe1738abe61e46e10ca1cf9a497c0))
+
 ## [1.3.1](https://github.com/robinnedergard/generated-react-test/compare/v1.3.0...v1.3.1) (2025-11-26)
 
 
