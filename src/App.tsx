@@ -164,7 +164,15 @@ function Layout({
               </button>
             </>
           ) : (
-            <Link to="/login" className="text-inherit no-underline text-sm mr-2">
+            <Link
+              to="/login"
+              className="text-inherit no-underline text-sm mr-2"
+              onClick={() => {
+                if (isCartOpen) {
+                  toggleCart()
+                }
+              }}
+            >
               Login
             </Link>
           )}
