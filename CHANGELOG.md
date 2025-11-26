@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/robinnedergard/generated-react-test/compare/v1.3.0...v1.3.1) (2025-11-26)
+
+
+### Bug Fixes
+
+* minor login confusion fix ([01a1f69](https://github.com/robinnedergard/generated-react-test/commit/01a1f69bd8de260a211fa2e91ae7da553d56472a))
+
 # [1.3.0](https://github.com/robinnedergard/generated-react-test/compare/v1.2.0...v1.3.0) (2025-11-26)
 
 
