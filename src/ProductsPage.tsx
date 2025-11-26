@@ -1,10 +1,12 @@
 import { useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { useQuery } from '@apollo/client/react'
-import './App.css'
 import ProductCard from './ProductCard'
 import { GET_PRODUCTS } from './graphql/queries'
 import type { Product } from './data/products'
+import LoadingState from './components/LoadingState'
+import ErrorMessage from './components/ErrorMessage'
+import PageContainer from './components/PageContainer'
 
 type ProductsPageProps = {
   addToCart: (productId: string) => void
@@ -24,25 +26,22 @@ export default function ProductsPage({ addToCart, isHighlighted }: ProductsPageP
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [location.pathname])
 
-  if (loading) return <div className="products-page">Loading products...</div>
-  if (error) return <div className="products-page">Error loading products: {error.message}</div>
+  if (loading) return <LoadingState message="Loading products..." />
+  if (error) return <ErrorMessage message={`Error loading products: ${error.message}`} />
 
   const products = data?.products || []
 
   return (
-    <div className="products-page">
-      <Link to="/" className="product-page__back">
-        ← Back to home
-      </Link>
-      <section className="product-grid">
-        <div className="section-heading">
-          <p className="eyebrow">Featured pieces</p>
-          <h2>Crafted to layer beautifully</h2>
-          <p>
+    <PageContainer backLink={{ to: '/', label: '← Back to home' }} innerClassName="py-8">
+      <section className="flex flex-col gap-10">
+        <div className="max-w-[520px]">
+          <p className="text-xs tracking-widest uppercase text-slate-400">Featured pieces</p>
+          <h2 className="m-0">Crafted to layer beautifully</h2>
+          <p className="m-0">
             Mix tactile fabrics, natural woods, and sculptural silhouettes for your signature look.
           </p>
         </div>
-        <div className="product-grid__items">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {products.map((product: Product) => (
             <ProductCard
               key={product.id}
@@ -53,6 +52,6 @@ export default function ProductsPage({ addToCart, isHighlighted }: ProductsPageP
           ))}
         </div>
       </section>
-    </div>
+    </PageContainer>
   )
 }

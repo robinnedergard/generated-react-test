@@ -1,8 +1,10 @@
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useQuery } from '@apollo/client/react'
-import './App.css'
 import { GET_CHECKOUT } from './graphql/queries'
+import LoadingState from './components/LoadingState'
+import EmptyState from './components/EmptyState'
+import PageContainer from './components/PageContainer'
 
 const currency = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -57,98 +59,76 @@ export default function CheckoutSuccessPage({ onClearCart }: CheckoutSuccessPage
   }, [])
 
   if (loading) {
-    return (
-      <div className="shop">
-        <div className="checkout-page">
-          <div className="checkout-page__empty">
-            <h1>Loading...</h1>
-          </div>
-        </div>
-      </div>
-    )
+    return <LoadingState />
   }
 
   const checkout = data?.checkout
 
   if (!checkout) {
     return (
-      <div className="shop">
-        <div className="checkout-page">
-          <div className="checkout-page__empty">
-            <h1>Checkout not found</h1>
-            <p>Sorry, we couldn't find your checkout information.</p>
-            <button
-              type="button"
-              className="btn btn--primary"
-              onClick={() => {
-                window.location.href = '/products'
-              }}
-            >
-              Continue Shopping
-            </button>
-          </div>
-        </div>
-      </div>
+      <EmptyState
+        title="Checkout not found"
+        message="Sorry, we couldn't find your checkout information."
+        actionLabel="Continue Shopping"
+        onAction={() => {
+          window.location.href = '/products'
+        }}
+      />
     )
   }
 
   return (
-    <div className="shop">
-      <div className="checkout-page">
-        <div className="checkout-page__success">
-          <div className="checkout-page__success-icon">
-            <svg
-              width="64"
-              height="64"
-              viewBox="0 0 64 64"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <circle cx="32" cy="32" r="32" fill="#22c55e" />
-              <path
-                d="M20 32L28 40L44 24"
-                stroke="white"
-                strokeWidth="4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+    <PageContainer>
+      <div className="text-center py-16 px-8 flex flex-col items-center gap-8 max-w-2xl mx-auto">
+        <div className="mb-4">
+          <svg
+            width="64"
+            height="64"
+            viewBox="0 0 64 64"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="32" cy="32" r="32" fill="#22c55e" />
+            <path
+              d="M20 32L28 40L44 24"
+              stroke="white"
+              strokeWidth="4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </div>
+        <h1 className="text-4xl m-0 font-semibold">Order Confirmed!</h1>
+        <p className="text-lg text-slate-600 m-0 leading-relaxed">
+          Thank you for your order. We've received your payment and will begin processing your
+          shipment shortly.
+        </p>
+        <div className="bg-white border border-slate-200 rounded-3xl p-8 w-full flex flex-col gap-4">
+          <div className="flex justify-between items-center pb-4 border-b border-slate-200">
+            <span className="font-semibold text-slate-600">Order ID:</span>
+            <span className="font-semibold text-slate-900">{checkout.id}</span>
           </div>
-          <h1 className="checkout-page__success-title">Order Confirmed!</h1>
-          <p className="checkout-page__success-message">
-            Thank you for your order. We've received your payment and will begin processing your
-            shipment shortly.
-          </p>
-          <div className="checkout-page__success-details">
-            <div className="checkout-page__success-detail">
-              <span className="checkout-page__success-label">Order ID:</span>
-              <span className="checkout-page__success-value">{checkout.id}</span>
-            </div>
-            <div className="checkout-page__success-detail">
-              <span className="checkout-page__success-label">Total:</span>
-              <span className="checkout-page__success-value">
-                {currency.format(checkout.total)}
-              </span>
-            </div>
-            <div className="checkout-page__success-detail">
-              <span className="checkout-page__success-label">Status:</span>
-              <span className="checkout-page__success-value">{checkout.status}</span>
-            </div>
+          <div className="flex justify-between items-center pb-4 border-b border-slate-200">
+            <span className="font-semibold text-slate-600">Total:</span>
+            <span className="font-semibold text-slate-900">{currency.format(checkout.total)}</span>
           </div>
-          <div className="checkout-page__success-actions">
-            <button
-              type="button"
-              className="btn btn--primary"
-              onClick={() => {
-                // Direct navigation using window.location to ensure page updates
-                window.location.href = '/products'
-              }}
-            >
-              Continue Shopping
-            </button>
+          <div className="flex justify-between items-center">
+            <span className="font-semibold text-slate-600">Status:</span>
+            <span className="font-semibold text-slate-900">{checkout.status}</span>
           </div>
         </div>
+        <div className="mt-4">
+          <button
+            type="button"
+            className="rounded-full px-6 py-3.5 text-sm font-semibold cursor-pointer transition-all bg-orange-500 text-white shadow-lg shadow-orange-500/25 hover:-translate-y-0.5"
+            onClick={() => {
+              window.location.href = '/products'
+            }}
+          >
+            Continue Shopping
+          </button>
+        </div>
       </div>
-    </div>
+    </PageContainer>
   )
 }

@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import './App.css'
 import { type Product } from './data/products'
 import { getAverageRating } from './utils/reviews'
-
-const currency = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-})
+import ProductImage from './components/product/ProductImage'
+import ProductMeta from './components/product/ProductMeta'
+import AddToCartButton from './components/product/AddToCartButton'
 
 type ProductCardProps = {
   product: Product
@@ -36,63 +33,46 @@ export default function ProductCard({ product, onAdd, isHighlighted }: ProductCa
     }
   }, [product.id])
 
-  const handleAddClick = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    onAdd()
-  }
-
   return (
     <Link
       to={`/product/${product.id}`}
-      className={`product-card ${isHighlighted ? 'product-card--highlight' : ''}`}
+      className={`bg-white rounded-3xl overflow-hidden border border-slate-200 flex flex-col min-h-full transition-all no-underline text-inherit cursor-pointer hover:-translate-y-0.5 hover:shadow-xl hover:shadow-slate-900/10 ${
+        isHighlighted ? 'shadow-lg shadow-orange-500/10' : ''
+      }`}
       data-testid="product-card"
     >
-      <div className="product-card__media">
-        <img src={product.image} alt={product.name} loading="lazy" />
-        {product.badge && <span className="product-card__badge">{product.badge}</span>}
-      </div>
-      <div className="product-card__body">
-        <p className="product-card__category">{product.category}</p>
-        <h3>{product.name}</h3>
-        <p className="product-card__description">{product.description}</p>
-        <div className="product-card__meta">
-          <span className="product-card__price">{currency.format(product.price)}</span>
-          {averageRating !== null && (
-            <span className="product-card__rating">★ {averageRating.toFixed(1)}</span>
-          )}
-        </div>
-        <div className="product-card__colors">
+      <ProductImage
+        product={product}
+        className="relative overflow-hidden aspect-[4/3] group-hover:scale-105 transition-transform"
+      />
+      <div className="p-7 flex flex-col gap-3 flex-1">
+        <p className="uppercase tracking-widest text-xs text-slate-400">{product.category}</p>
+        <h3 className="m-0">{product.name}</h3>
+        <p className="text-slate-600 m-0 flex-1">{product.description}</p>
+        <ProductMeta
+          product={product}
+          averageRating={averageRating}
+          className="flex justify-between items-center font-semibold"
+          priceClassName="text-lg"
+          ratingClassName="text-amber-500"
+        />
+        <div className="flex flex-wrap gap-2 text-sm text-slate-600">
           {product.colors.map((color) => (
             <span key={color}>{color}</span>
           ))}
         </div>
-        <button
-          type="button"
-          className={`product-card__cta ${isHighlighted ? 'product-card__cta--highlight' : ''}`}
-          onClick={handleAddClick}
+        <div
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+          }}
         >
-          Add to bag
-          {isHighlighted && (
-            <span className="product-card__checkmark" aria-label="Added to bag">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M13.3333 4L6 11.3333L2.66667 8"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
-          )}
-        </button>
+          <AddToCartButton
+            onClick={() => onAdd()}
+            isHighlighted={isHighlighted}
+            className="px-5 py-2 text-xs"
+          />
+        </div>
       </div>
     </Link>
   )

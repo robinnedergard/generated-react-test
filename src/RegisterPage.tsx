@@ -1,7 +1,9 @@
 import { useState, type FormEvent } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from './contexts/AuthContext'
-import './App.css'
+import FormField from './components/FormField'
+import ErrorMessage from './components/ErrorMessage'
+import PageContainer from './components/PageContainer'
 
 export default function RegisterPage() {
   const navigate = useNavigate()
@@ -35,108 +37,77 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="shop">
-      <div className="checkout-page">
-        <div className="checkout-page__content">
-          <div className="checkout-page__form-section" style={{ maxWidth: '500px', margin: '0 auto' }}>
-            <h1 className="checkout-page__title">Register</h1>
+    <PageContainer>
+      <div className="max-w-[500px] mx-auto">
+        <h1 className="text-4xl mb-8 m-0">Register</h1>
 
-            <form className="checkout-form" onSubmit={handleSubmit}>
-              {error && (
-                <div className="checkout-form__error">
-                  <p>{error}</p>
-                </div>
-              )}
+        <form className="flex flex-col gap-8" onSubmit={handleSubmit}>
+          {error && <ErrorMessage message={error} />}
 
-              <div className="checkout-form__row">
-                <div className="checkout-form__group">
-                  <label htmlFor="firstName" className="checkout-form__label">
-                    First Name
-                  </label>
-                  <input
-                    id="firstName"
-                    name="firstName"
-                    type="text"
-                    className="checkout-form__input"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    required
-                    autoComplete="given-name"
-                  />
-                </div>
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              id="firstName"
+              name="firstName"
+              label="First Name"
+              type="text"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              required
+              autoComplete="given-name"
+            />
 
-                <div className="checkout-form__group">
-                  <label htmlFor="lastName" className="checkout-form__label">
-                    Last Name
-                  </label>
-                  <input
-                    id="lastName"
-                    name="lastName"
-                    type="text"
-                    className="checkout-form__input"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    required
-                    autoComplete="family-name"
-                  />
-                </div>
-              </div>
-
-              <div className="checkout-form__group">
-                <label htmlFor="email" className="checkout-form__label">
-                  Email
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  className="checkout-form__input"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  autoComplete="email"
-                />
-              </div>
-
-              <div className="checkout-form__group">
-                <label htmlFor="password" className="checkout-form__label">
-                  Password
-                </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  className="checkout-form__input"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  autoComplete="new-password"
-                  minLength={6}
-                />
-                <small style={{ display: 'block', marginTop: '0.25rem', color: '#666' }}>
-                  Must be at least 6 characters
-                </small>
-              </div>
-
-              <button
-                type="submit"
-                className="btn btn--primary btn--full checkout-form__submit"
-                disabled={loading}
-              >
-                {loading ? 'Registering...' : 'Register'}
-              </button>
-
-              <p style={{ textAlign: 'center', marginTop: '1rem' }}>
-                Already have an account?{' '}
-                <Link to="/login" style={{ color: 'inherit', textDecoration: 'underline' }}>
-                  Login here
-                </Link>
-              </p>
-            </form>
+            <FormField
+              id="lastName"
+              name="lastName"
+              label="Last Name"
+              type="text"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              required
+              autoComplete="family-name"
+            />
           </div>
-        </div>
+
+          <FormField
+            id="email"
+            name="email"
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            autoComplete="email"
+          />
+
+          <FormField
+            id="password"
+            name="password"
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            autoComplete="new-password"
+            minLength={6}
+            small="Must be at least 6 characters"
+          />
+
+          <button
+            type="submit"
+            className="rounded-full px-6 py-3.5 text-sm font-semibold cursor-pointer transition-all bg-orange-500 text-white shadow-lg shadow-orange-500/25 hover:-translate-y-0.5 w-full text-center mt-4 disabled:opacity-60 disabled:cursor-not-allowed"
+            disabled={loading}
+          >
+            {loading ? 'Registering...' : 'Register'}
+          </button>
+
+          <p className="text-center mt-4">
+            Already have an account?{' '}
+            <Link to="/login" className="text-inherit underline">
+              Login here
+            </Link>
+          </p>
+        </form>
       </div>
-    </div>
+    </PageContainer>
   )
 }
-
