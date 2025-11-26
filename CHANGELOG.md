@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.3.0](https://github.com/robinnedergard/generated-react-test/compare/v1.2.0...v1.3.0) (2025-11-26)
+
+
+### Features
+
+* use tailwind for styling and refactor components ([#18](https://github.com/robinnedergard/generated-react-test/issues/18)) ([5040958](https://github.com/robinnedergard/generated-react-test/commit/50409587b408652defea629eddafc1644c5d48e4))
+
 # [1.2.0](https://github.com/robinnedergard/generated-react-test/compare/v1.1.1...v1.2.0) (2025-11-22)
 
 
