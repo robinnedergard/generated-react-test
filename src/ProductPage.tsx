@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useQuery } from '@apollo/client/react'
-import './App.css'
 import Reviews from './Reviews'
 import { getAverageRating } from './utils/reviews'
 import { GET_PRODUCT } from './graphql/queries'
 import type { Product } from './data/products'
-
-const currency = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-})
+import LoadingState from './components/LoadingState'
+import EmptyState from './components/EmptyState'
+import PageContainer from './components/PageContainer'
+import ProductImage from './components/product/ProductImage'
+import ProductDetails from './components/product/ProductDetails'
 
 type ProductPageProps = {
   onAddToCart: (productId: string) => void
@@ -67,30 +66,17 @@ export default function ProductPage({ onAddToCart, isHighlighted }: ProductPageP
   }, [product])
 
   if (loading) {
-    return (
-      <div className="shop">
-        <div className="product-page">
-          <div className="product-page__not-found">
-            <h1>Loading...</h1>
-          </div>
-        </div>
-      </div>
-    )
+    return <LoadingState />
   }
 
   if (error || !product) {
     return (
-      <div className="shop">
-        <div className="product-page">
-          <div className="product-page__not-found">
-            <h1>Product not found</h1>
-            <p>Sorry, we couldn't find the product you're looking for.</p>
-            <Link to="/products" className="btn btn--primary">
-              Back to products
-            </Link>
-          </div>
-        </div>
-      </div>
+      <EmptyState
+        title="Product not found"
+        message="Sorry, we couldn't find the product you're looking for."
+        actionLabel="Back to products"
+        actionTo="/products"
+      />
     )
   }
 
@@ -103,90 +89,20 @@ export default function ProductPage({ onAddToCart, isHighlighted }: ProductPageP
   }
 
   return (
-    <div className="shop">
-      <div className="product-page">
-        <Link to="/products" className="product-page__back">
-          ← Back to products
-        </Link>
-
-        <div className="product-page__content">
-          <div className="product-page__media">
-            <img src={product.image} alt={product.name} />
-            {product.badge && <span className="product-card__badge">{product.badge}</span>}
-          </div>
-
-          <div className="product-page__details">
-            <p className="product-page__category">{product.category}</p>
-            <h1 className="product-page__title">{product.name}</h1>
-            <p className="product-page__description">{product.description}</p>
-
-            <div className="product-page__meta">
-              <span className="product-page__price">{currency.format(product.price)}</span>
-              {averageRating !== null && (
-                <span className="product-page__rating">★ {averageRating.toFixed(1)}</span>
-              )}
-            </div>
-
-            <div className="product-page__colors">
-              <p className="product-page__colors-label">Available colors:</p>
-              <div className="product-page__colors-list">
-                {product.colors.map((color: string) => (
-                  <button
-                    key={color}
-                    type="button"
-                    className={`product-page__color-option ${
-                      selectedColor === color ? 'product-page__color-option--selected' : ''
-                    }`}
-                    onClick={() => handleColorSelect(color)}
-                    aria-label={`Select color ${color}`}
-                  >
-                    {color}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <button
-              type="button"
-              className={`product-page__cta ${isHighlighted(product.id) ? 'product-card__cta--highlight' : ''}`}
-              onClick={handleAddToCart}
-            >
-              Add to bag
-              {isHighlighted(product.id) && (
-                <span className="product-card__checkmark" aria-label="Added to bag">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M13.3333 4L6 11.3333L2.66667 8"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
-              )}
-            </button>
-
-            <div className="product-page__info">
-              <h3>Product details</h3>
-              <ul>
-                <li>Premium materials and craftsmanship</li>
-                <li>30-day return policy</li>
-                <li>Complimentary shipping on orders over $150</li>
-                <li>Design consultation available</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <Reviews productId={product.id} />
+    <PageContainer backLink={{ to: '/products', label: '← Back to products' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        <ProductImage product={product} />
+        <ProductDetails
+          product={product}
+          averageRating={averageRating}
+          selectedColor={selectedColor}
+          onColorSelect={handleColorSelect}
+          onAddToCart={handleAddToCart}
+          isHighlighted={isHighlighted(product.id)}
+        />
       </div>
-    </div>
+
+      <Reviews productId={product.id} />
+    </PageContainer>
   )
 }

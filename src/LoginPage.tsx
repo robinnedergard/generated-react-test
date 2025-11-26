@@ -1,7 +1,9 @@
 import { useState, type FormEvent } from 'react'
 import { useNavigate, Link, useLocation } from 'react-router-dom'
 import { useAuth } from './contexts/AuthContext'
-import './App.css'
+import FormField from './components/FormField'
+import ErrorMessage from './components/ErrorMessage'
+import PageContainer from './components/PageContainer'
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -30,72 +32,51 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="shop">
-      <div className="checkout-page">
-        <div className="checkout-page__content">
-          <div
-            className="checkout-page__form-section"
-            style={{ maxWidth: '500px', margin: '0 auto' }}
+    <PageContainer>
+      <div className="max-w-[500px] mx-auto">
+        <h1 className="text-4xl mb-8 m-0">Login</h1>
+
+        <form className="flex flex-col gap-8" onSubmit={handleSubmit}>
+          {error && <ErrorMessage message={error} />}
+
+          <FormField
+            id="email"
+            name="email"
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            autoComplete="email"
+          />
+
+          <FormField
+            id="password"
+            name="password"
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            autoComplete="current-password"
+          />
+
+          <button
+            type="submit"
+            className="rounded-full px-6 py-3.5 text-sm font-semibold cursor-pointer transition-all bg-orange-500 text-white shadow-lg shadow-orange-500/25 hover:-translate-y-0.5 w-full text-center mt-4 disabled:opacity-60 disabled:cursor-not-allowed"
+            disabled={loading}
           >
-            <h1 className="checkout-page__title">Login</h1>
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
 
-            <form className="checkout-form" onSubmit={handleSubmit}>
-              {error && (
-                <div className="checkout-form__error">
-                  <p>{error}</p>
-                </div>
-              )}
-
-              <div className="checkout-form__group">
-                <label htmlFor="email" className="checkout-form__label">
-                  Email
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  className="checkout-form__input"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  autoComplete="email"
-                />
-              </div>
-
-              <div className="checkout-form__group">
-                <label htmlFor="password" className="checkout-form__label">
-                  Password
-                </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  className="checkout-form__input"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  autoComplete="current-password"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="btn btn--primary btn--full checkout-form__submit"
-                disabled={loading}
-              >
-                {loading ? 'Logging in...' : 'Login'}
-              </button>
-
-              <p style={{ textAlign: 'center', marginTop: '1rem' }}>
-                Don't have an account?{' '}
-                <Link to="/register" style={{ color: 'inherit', textDecoration: 'underline' }}>
-                  Register here
-                </Link>
-              </p>
-            </form>
-          </div>
-        </div>
+          <p className="text-center mt-4">
+            Don't have an account?{' '}
+            <Link to="/register" className="text-inherit underline">
+              Register here
+            </Link>
+          </p>
+        </form>
       </div>
-    </div>
+    </PageContainer>
   )
 }
