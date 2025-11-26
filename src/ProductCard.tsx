@@ -1,7 +1,5 @@
-import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { type Product } from './data/products'
-import { getAverageRating } from './utils/reviews'
 import ProductImage from './components/product/ProductImage'
 import ProductMeta from './components/product/ProductMeta'
 import AddToCartButton from './components/product/AddToCartButton'
@@ -13,25 +11,8 @@ type ProductCardProps = {
 }
 
 export default function ProductCard({ product, onAdd, isHighlighted }: ProductCardProps) {
-  const [averageRating, setAverageRating] = useState<number | null>(null)
-
-  useEffect(() => {
-    const loadRating = () => {
-      const rating = getAverageRating(product.id)
-      setAverageRating(rating)
-    }
-    loadRating()
-
-    const handleReviewAdded = () => {
-      const newRating = getAverageRating(product.id)
-      setAverageRating(newRating)
-    }
-
-    window.addEventListener('reviewAdded', handleReviewAdded)
-    return () => {
-      window.removeEventListener('reviewAdded', handleReviewAdded)
-    }
-  }, [product.id])
+  // Use product.rating from database (which should be kept up to date)
+  const averageRating = product.rating || null
 
   return (
     <Link

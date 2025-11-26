@@ -1,14 +1,16 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { useQuery, useMutation } from '@apollo/client/react'
 import ReviewItem from './components/reviews/ReviewItem'
 import ReviewForm from './components/reviews/ReviewForm'
+import { GET_REVIEWS, CREATE_REVIEW } from './graphql/queries'
 
 type Review = {
   id: string
   productId: string
-  name: string
+  userName: string
   text: string
   rating: number
-  date: string
+  createdAt: string
 }
 
 type ReviewsProps = {
@@ -16,67 +18,59 @@ type ReviewsProps = {
 }
 
 export default function Reviews({ productId }: ReviewsProps) {
-  const [reviews, setReviews] = useState<Review[]>([])
-  const [error, setError] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [formError, setFormError] = useState('')
+  const {
+    data,
+    loading,
+    error: queryError,
+    refetch,
+  } = useQuery<{ reviews: Review[] }>(GET_REVIEWS, {
+    variables: { productId },
+  })
 
-  useEffect(() => {
-    const loadReviews = () => {
-      const stored = localStorage.getItem(`reviews-${productId}`)
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored) as Review[]
-          // Filter out old reviews without ratings
-          const validReviews = parsed.filter((review) => review.rating && review.rating > 0)
-          setReviews(validReviews)
-          // Update localStorage to remove old reviews
-          if (validReviews.length !== parsed.length) {
-            localStorage.setItem(`reviews-${productId}`, JSON.stringify(validReviews))
-          }
-        } catch {
-          // Invalid JSON, ignore
-        }
-      }
-    }
-    loadReviews()
-  }, [productId])
-
-  const handleSubmit = async (review: { name: string; text: string; rating: number }) => {
-    setIsSubmitting(true)
-    setError('')
-
-    // Simulate a brief delay for better UX
-    return new Promise<void>((resolve) => {
-      setTimeout(() => {
-        const newReview: Review = {
-          id: Date.now().toString(),
-          productId,
-          name: review.name,
-          text: review.text,
-          rating: review.rating,
-          date: new Date().toISOString(),
-        }
-
-        const updatedReviews = [newReview, ...reviews]
-        setReviews(updatedReviews)
-        localStorage.setItem(`reviews-${productId}`, JSON.stringify(updatedReviews))
-
+  const [createReview, { loading: isSubmitting, error: mutationError }] = useMutation(
+    CREATE_REVIEW,
+    {
+      onCompleted: () => {
+        setFormError('')
+        refetch()
         // Dispatch custom event to notify other components
         window.dispatchEvent(new CustomEvent('reviewAdded', { detail: { productId } }))
+      },
+    },
+  )
 
-        setIsSubmitting(false)
-        resolve()
-      }, 300)
-    })
+  const reviews = data?.reviews || []
+  const error = formError || mutationError?.message || queryError?.message || ''
+
+  const handleSubmit = async (review: { name?: string; text: string; rating: number }) => {
+    setFormError('')
+    try {
+      await createReview({
+        variables: {
+          createReviewInput: {
+            productId,
+            text: review.text,
+            rating: review.rating,
+            name: review.name,
+          },
+        },
+      })
+    } catch (err) {
+      // Error is handled by mutation error
+      console.error('Failed to create review:', err)
+    }
   }
 
   return (
     <section className="mt-16 pt-12 border-t border-slate-200">
       <h2 className="text-3xl m-0 mb-8">Customer Reviews</h2>
 
-      {reviews.length > 0 && (
+      {loading && <p className="text-slate-600">Loading reviews...</p>}
+
+      {!loading && reviews.length > 0 && (
         <div className="flex flex-col gap-6 mb-12">
-          {reviews.map((review) => (
+          {reviews.map((review: Review) => (
             <ReviewItem key={review.id} review={review} />
           ))}
         </div>
@@ -86,7 +80,7 @@ export default function Reviews({ productId }: ReviewsProps) {
         onSubmit={handleSubmit}
         isSubmitting={isSubmitting}
         error={error}
-        onError={setError}
+        onError={setFormError}
       />
     </section>
   )

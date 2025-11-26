@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import { useQuery } from '@apollo/client/react'
 import Reviews from './Reviews'
 import { getAverageRating } from './utils/reviews'
-import { GET_PRODUCT } from './graphql/queries'
+import { GET_PRODUCT, GET_REVIEWS } from './graphql/queries'
 import type { Product } from './data/products'
 import LoadingState from './components/LoadingState'
 import EmptyState from './components/EmptyState'
@@ -23,10 +23,23 @@ type ProductQueryResult = {
 export default function ProductPage({ onAddToCart, isHighlighted }: ProductPageProps) {
   const { id } = useParams<{ id: string }>()
   const [selectedColor, setSelectedColor] = useState<string | null>(null)
-  const [averageRating, setAverageRating] = useState<number | null>(null)
 
   const { loading, error, data } = useQuery<ProductQueryResult>(GET_PRODUCT, {
     variables: { id: id || '' },
+    skip: !id,
+  })
+
+  const { data: reviewsData, refetch: refetchReviews } = useQuery<{
+    reviews: Array<{
+      id: string
+      productId: string
+      userName: string
+      text: string
+      rating: number
+      createdAt: string
+    }>
+  }>(GET_REVIEWS, {
+    variables: { productId: id || '' },
     skip: !id,
   })
 
@@ -37,33 +50,28 @@ export default function ProductPage({ onAddToCart, isHighlighted }: ProductPageP
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [id])
 
-  useEffect(() => {
-    if (!product) return
-    const loadRating = () => {
-      const rating = getAverageRating(product.id)
-      setAverageRating(rating)
+  // Calculate average rating from reviews
+  const averageRating = useMemo(() => {
+    if (reviewsData?.reviews) {
+      return getAverageRating(reviewsData.reviews)
     }
-    loadRating()
-  }, [product])
+    return null
+  }, [reviewsData])
 
-  // Listen for storage changes to update rating when new reviews are added
+  // Listen for review added event to refetch reviews
   useEffect(() => {
-    if (!product) return
+    if (!id) return
 
-    const handleStorageChange = () => {
-      const rating = getAverageRating(product.id)
-      setAverageRating(rating)
+    const handleReviewAdded = () => {
+      refetchReviews()
     }
 
-    window.addEventListener('storage', handleStorageChange)
-    // Also listen for custom event from Reviews component
-    window.addEventListener('reviewAdded', handleStorageChange)
+    window.addEventListener('reviewAdded', handleReviewAdded)
 
     return () => {
-      window.removeEventListener('storage', handleStorageChange)
-      window.removeEventListener('reviewAdded', handleStorageChange)
+      window.removeEventListener('reviewAdded', handleReviewAdded)
     }
-  }, [product])
+  }, [id, refetchReviews])
 
   if (loading) {
     return <LoadingState />
