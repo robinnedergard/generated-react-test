@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/robinnedergard/generated-react-test/compare/v1.4.0...v1.4.1) (2025-11-30)
+
+
+### Bug Fixes
+
+* preferring named to default exports ([e961959](https://github.com/robinnedergard/generated-react-test/commit/e961959bb7a62aa5722658004374b486221c33a2))
+
 # [1.4.0](https://github.com/robinnedergard/generated-react-test/compare/v1.3.1...v1.4.0) (2025-11-26)
 
 
