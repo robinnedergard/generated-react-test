@@ -3,12 +3,12 @@ import type { FormEvent } from 'react'
 import { useMutation } from '@apollo/client/react'
 import { CREATE_CHECKOUT } from './graphql/queries'
 import type { Product } from './data/products'
-import ErrorMessage from './components/ErrorMessage'
-import PageContainer from './components/PageContainer'
-import EmptyCartState from './components/checkout/EmptyCartState'
-import ShippingAddressForm from './components/checkout/ShippingAddressForm'
-import PaymentMethodSelect from './components/checkout/PaymentMethodSelect'
-import OrderSummary from './components/checkout/OrderSummary'
+import { ErrorMessage } from './components/ErrorMessage'
+import { PageContainer } from './components/PageContainer'
+import { EmptyCartState } from './components/checkout/EmptyCartState'
+import { ShippingAddressForm } from './components/checkout/ShippingAddressForm'
+import { PaymentMethodSelect } from './components/checkout/PaymentMethodSelect'
+import { OrderSummary } from './components/checkout/OrderSummary'
 
 type CartLineItem = {
   product: Product
@@ -133,7 +133,7 @@ export default function CheckoutPage({ cartItems, subtotal, shipping, total }: C
   return (
     <PageContainer backLink={{ to: '/products', label: '← Back to products' }}>
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-12 mt-8">
-        <div>
+        <section>
           <h1 className="text-4xl mb-8 m-0">Checkout</h1>
 
           <form className="flex flex-col gap-8" onSubmit={handleSubmit}>
@@ -150,7 +150,7 @@ export default function CheckoutPage({ cartItems, subtotal, shipping, total }: C
               {loading ? 'Processing...' : 'Complete Order'}
             </button>
           </form>
-        </div>
+        </section>
 
         <OrderSummary cartItems={cartItems} subtotal={subtotal} shipping={shipping} total={total} />
       </div>

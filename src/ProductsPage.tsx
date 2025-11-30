@@ -4,9 +4,9 @@ import { useQuery } from '@apollo/client/react'
 import ProductCard from './ProductCard'
 import { GET_PRODUCTS } from './graphql/queries'
 import type { Product } from './data/products'
-import LoadingState from './components/LoadingState'
-import ErrorMessage from './components/ErrorMessage'
-import PageContainer from './components/PageContainer'
+import { LoadingState } from './components/LoadingState'
+import { ErrorMessage } from './components/ErrorMessage'
+import { PageContainer } from './components/PageContainer'
 
 type ProductsPageProps = {
   addToCart: (productId: string) => void

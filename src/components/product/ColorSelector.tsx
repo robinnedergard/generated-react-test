@@ -8,7 +8,7 @@ type ColorSelectorProps = {
   optionClassName?: string
 }
 
-export default function ColorSelector({
+export function ColorSelector({
   colors,
   selectedColor,
   onColorSelect,

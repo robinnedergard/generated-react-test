@@ -2,10 +2,10 @@ import { useEffect } from 'react'
 import { useQuery } from '@apollo/client/react'
 import { useAuth } from './contexts/AuthContext'
 import { MY_ORDERS } from './graphql/queries'
-import LoadingState from './components/LoadingState'
-import EmptyState from './components/EmptyState'
-import PageContainer from './components/PageContainer'
-import OrderCard from './components/orders/OrderCard'
+import { LoadingState } from './components/LoadingState'
+import { EmptyState } from './components/EmptyState'
+import { PageContainer } from './components/PageContainer'
+import { OrderCard } from './components/orders/OrderCard'
 
 type OrderItem = {
   productId: string
@@ -88,8 +88,8 @@ export default function UserOrdersPage() {
 
   return (
     <PageContainer backLink={{ to: '/products', label: '← Back to products' }}>
-      <div className="w-full max-w-3xl mx-auto">
-        <h1 className="text-4xl mb-8 m-0">My Orders</h1>
+      <div className="w-full max-w-3xl mx-auto flex flex-col gap-8">
+        <h1 className="text-4xl m-0">My Orders</h1>
 
         <div className="flex flex-col gap-6">
           {orders.map((order) => (

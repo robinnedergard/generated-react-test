@@ -6,7 +6,7 @@ type BackLinkProps = {
   className?: string
 }
 
-export default function BackLink({
+export function BackLink({
   to,
   label = '← Back',
   className = '',

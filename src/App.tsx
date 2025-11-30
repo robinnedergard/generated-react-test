@@ -9,7 +9,7 @@ import CheckoutSuccessPage from './CheckoutSuccessPage'
 import LoginPage from './LoginPage'
 import RegisterPage from './RegisterPage'
 import UserOrdersPage from './UserOrdersPage'
-import ProtectedRoute from './components/ProtectedRoute'
+import { ProtectedRoute } from './components/ProtectedRoute'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { GET_PRODUCTS } from './graphql/queries'
 

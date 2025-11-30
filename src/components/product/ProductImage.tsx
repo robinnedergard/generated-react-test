@@ -5,7 +5,7 @@ type ProductImageProps = {
   className?: string
 }
 
-export default function ProductImage({ product, className = '' }: ProductImageProps) {
+export function ProductImage({ product, className = '' }: ProductImageProps) {
   return (
     <div className={`relative rounded-3xl overflow-hidden aspect-[4/3] bg-white border border-slate-200 ${className}`}>
       <img src={product.image} alt={product.name} className="w-full h-full object-cover" />

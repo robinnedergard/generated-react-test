@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import StarRating from './StarRating'
-import ErrorMessage from '../ErrorMessage'
+import { StarRating } from './StarRating'
+import { ErrorMessage } from '../ErrorMessage'
 import { useAuth } from '../../contexts/AuthContext'
 
 function generateCaptcha() {
@@ -16,7 +16,7 @@ type ReviewFormProps = {
   onError: (error: string) => void
 }
 
-export default function ReviewForm({ onSubmit, isSubmitting, error, onError }: ReviewFormProps) {
+export function ReviewForm({ onSubmit, isSubmitting, error, onError }: ReviewFormProps) {
   const { isAuthenticated } = useAuth()
   const [name, setName] = useState('')
   const [text, setText] = useState('')

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
-import EmptyState from '../EmptyState'
+import { EmptyState } from '../EmptyState'
 
-export default function EmptyCartState() {
+export function EmptyCartState() {
   const navigate = useNavigate()
 
   return (

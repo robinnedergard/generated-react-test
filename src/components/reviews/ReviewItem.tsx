@@ -1,4 +1,4 @@
-import StarRating from './StarRating'
+import { StarRating } from './StarRating'
 
 type Review = {
   id: string
@@ -22,7 +22,7 @@ function formatDate(dateString: string) {
   })
 }
 
-export default function ReviewItem({ review }: ReviewItemProps) {
+export function ReviewItem({ review }: ReviewItemProps) {
   return (
     <article className="bg-white border border-slate-200 rounded-3xl p-6 flex flex-col gap-3">
       <div className="flex justify-between items-start gap-4 flex-wrap">

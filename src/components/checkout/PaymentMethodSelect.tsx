@@ -5,7 +5,7 @@ type PaymentMethodSelectProps = {
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void
 }
 
-export default function PaymentMethodSelect({ value, onChange }: PaymentMethodSelectProps) {
+export function PaymentMethodSelect({ value, onChange }: PaymentMethodSelectProps) {
   return (
     <section className="bg-white border border-slate-200 rounded-3xl p-8 flex flex-col gap-6">
       <h2 className="text-xl mb-2 font-semibold">Payment Method</h2>

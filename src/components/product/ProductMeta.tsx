@@ -13,7 +13,7 @@ type ProductMetaProps = {
   ratingClassName?: string
 }
 
-export default function ProductMeta({
+export function ProductMeta({
   product,
   averageRating,
   className = '',

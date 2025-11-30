@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import StatusBadge from './StatusBadge'
+import { StatusBadge } from './StatusBadge'
 
 const currency = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -26,14 +26,12 @@ type OrderCardProps = {
   order: Order
 }
 
-export default function OrderCard({ order }: OrderCardProps) {
+export function OrderCard({ order }: OrderCardProps) {
   return (
     <div className="border border-slate-200 rounded-lg p-6 bg-white">
-      <div className="flex justify-between items-start mb-4">
+      <header className="flex justify-between items-start mb-4">
         <div>
-          <h3 className="m-0 mb-2 text-lg">
-            Order #{order.id.slice(0, 8)}
-          </h3>
+          <h3 className="m-0 mb-2 text-lg">Order #{order.id.slice(0, 8)}</h3>
           <p className="m-0 text-sm text-slate-500">
             {new Date(order.createdAt).toLocaleDateString('en-US', {
               year: 'numeric',
@@ -44,16 +42,12 @@ export default function OrderCard({ order }: OrderCardProps) {
         </div>
         <div className="text-right">
           <StatusBadge status={order.status} />
-          <div className="text-xl font-semibold">
-            {currency.format(order.total)}
-          </div>
+          <p className="text-xl font-semibold m-0">{currency.format(order.total)}</p>
         </div>
-      </div>
+      </header>
 
-      <div className="mb-4">
-        <p className="m-0 mb-2 text-sm text-slate-500">
-          Items:
-        </p>
+      <section className="mb-4">
+        <p className="m-0 mb-2 text-sm text-slate-500">Items:</p>
         <ul className="m-0 pl-5 list-disc">
           {order.items.map((item, index) => (
             <li key={index} className="mb-1">
@@ -61,7 +55,7 @@ export default function OrderCard({ order }: OrderCardProps) {
             </li>
           ))}
         </ul>
-      </div>
+      </section>
 
       <Link
         to={`/checkout/${order.id}/success`}
@@ -72,4 +66,3 @@ export default function OrderCard({ order }: OrderCardProps) {
     </div>
   )
 }
-

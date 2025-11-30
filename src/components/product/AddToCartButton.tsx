@@ -6,7 +6,7 @@ type AddToCartButtonProps = {
   checkmarkClassName?: string
 }
 
-export default function AddToCartButton({
+export function AddToCartButton({
   onClick,
   isHighlighted,
   className = '',

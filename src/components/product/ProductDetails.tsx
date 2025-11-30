@@ -1,7 +1,7 @@
 import type { Product } from '../../data/products'
-import ProductMeta from './ProductMeta'
-import ColorSelector from './ColorSelector'
-import AddToCartButton from './AddToCartButton'
+import { ProductMeta } from './ProductMeta'
+import { ColorSelector } from './ColorSelector'
+import { AddToCartButton } from './AddToCartButton'
 
 type ProductDetailsProps = {
   product: Product
@@ -12,7 +12,7 @@ type ProductDetailsProps = {
   isHighlighted: boolean
 }
 
-export default function ProductDetails({
+export function ProductDetails({
   product,
   averageRating,
   selectedColor,

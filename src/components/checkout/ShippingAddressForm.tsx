@@ -1,5 +1,5 @@
 import type { ChangeEvent } from 'react'
-import FormField from '../FormField'
+import { FormField } from '../FormField'
 
 type ShippingAddressFormProps = {
   formData: {
@@ -14,7 +14,7 @@ type ShippingAddressFormProps = {
   onChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void
 }
 
-export default function ShippingAddressForm({ formData, onChange }: ShippingAddressFormProps) {
+export function ShippingAddressForm({ formData, onChange }: ShippingAddressFormProps) {
   return (
     <section className="bg-white border border-slate-200 rounded-3xl p-8 flex flex-col gap-6">
       <h2 className="text-xl mb-2 font-semibold">Shipping Address</h2>

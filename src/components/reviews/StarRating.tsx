@@ -6,7 +6,7 @@ type StarRatingProps = {
   interactive?: boolean
 }
 
-export default function StarRating({ rating, onRatingChange, interactive = false }: StarRatingProps) {
+export function StarRating({ rating, onRatingChange, interactive = false }: StarRatingProps) {
   const [hoverRating, setHoverRating] = useState(0)
 
   const handleClick = (value: number) => {

@@ -6,7 +6,7 @@ function getStatusLabel(status: string): string {
   return status.charAt(0).toUpperCase() + status.slice(1)
 }
 
-export default function StatusBadge({ status }: StatusBadgeProps) {
+export function StatusBadge({ status }: StatusBadgeProps) {
   const label = getStatusLabel(status)
   
   const statusClasses: Record<string, string> = {

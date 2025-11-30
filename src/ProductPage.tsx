@@ -5,11 +5,11 @@ import Reviews from './Reviews'
 import { getAverageRating } from './utils/reviews'
 import { GET_PRODUCT, GET_REVIEWS } from './graphql/queries'
 import type { Product } from './data/products'
-import LoadingState from './components/LoadingState'
-import EmptyState from './components/EmptyState'
-import PageContainer from './components/PageContainer'
-import ProductImage from './components/product/ProductImage'
-import ProductDetails from './components/product/ProductDetails'
+import { LoadingState } from './components/LoadingState'
+import { EmptyState } from './components/EmptyState'
+import { PageContainer } from './components/PageContainer'
+import { ProductImage } from './components/product/ProductImage'
+import { ProductDetails } from './components/product/ProductDetails'
 
 type ProductPageProps = {
   onAddToCart: (productId: string) => void

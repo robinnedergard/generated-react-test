@@ -1,9 +1,9 @@
 import { useState, type FormEvent } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from './contexts/AuthContext'
-import FormField from './components/FormField'
-import ErrorMessage from './components/ErrorMessage'
-import PageContainer from './components/PageContainer'
+import { FormField } from './components/FormField'
+import { ErrorMessage } from './components/ErrorMessage'
+import { PageContainer } from './components/PageContainer'
 
 export default function RegisterPage() {
   const navigate = useNavigate()

@@ -2,9 +2,9 @@ import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useQuery } from '@apollo/client/react'
 import { GET_CHECKOUT } from './graphql/queries'
-import LoadingState from './components/LoadingState'
-import EmptyState from './components/EmptyState'
-import PageContainer from './components/PageContainer'
+import { LoadingState } from './components/LoadingState'
+import { EmptyState } from './components/EmptyState'
+import { PageContainer } from './components/PageContainer'
 
 const currency = new Intl.NumberFormat('en-US', {
   style: 'currency',

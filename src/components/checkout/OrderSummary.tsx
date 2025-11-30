@@ -17,7 +17,7 @@ type OrderSummaryProps = {
   total: number
 }
 
-export default function OrderSummary({ cartItems, subtotal, shipping, total }: OrderSummaryProps) {
+export function OrderSummary({ cartItems, subtotal, shipping, total }: OrderSummaryProps) {
   return (
     <div className="bg-white border border-slate-200 rounded-3xl p-8 h-fit sticky top-8">
       <h2 className="text-2xl mb-6 font-semibold">Order Summary</h2>

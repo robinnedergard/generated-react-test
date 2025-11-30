@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useQuery, useMutation } from '@apollo/client/react'
-import ReviewItem from './components/reviews/ReviewItem'
-import ReviewForm from './components/reviews/ReviewForm'
+import { ReviewItem } from './components/reviews/ReviewItem'
+import { ReviewForm } from './components/reviews/ReviewForm'
 import { GET_REVIEWS, CREATE_REVIEW } from './graphql/queries'
 
 type Review = {

@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import { type Product } from './data/products'
-import ProductImage from './components/product/ProductImage'
-import ProductMeta from './components/product/ProductMeta'
-import AddToCartButton from './components/product/AddToCartButton'
+import { ProductImage } from './components/product/ProductImage'
+import { ProductMeta } from './components/product/ProductMeta'
+import { AddToCartButton } from './components/product/AddToCartButton'
 
 type ProductCardProps = {
   product: Product

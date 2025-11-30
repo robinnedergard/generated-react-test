@@ -17,7 +17,7 @@ type FormFieldProps = {
   small?: React.ReactNode
 }
 
-export default function FormField({
+export function FormField({
   id,
   name,
   label,
@@ -59,4 +59,3 @@ export default function FormField({
     </div>
   )
 }
-
