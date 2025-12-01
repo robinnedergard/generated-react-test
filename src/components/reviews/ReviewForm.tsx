@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { StarRating } from './StarRating'
 import { ErrorMessage } from '../ErrorMessage'
-import { useAuth } from '../../contexts/AuthContext'
+import { useAuth } from '../../hooks/useAuth'
 
 function generateCaptcha() {
   const num1 = Math.floor(Math.random() * 10) + 1

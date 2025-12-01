@@ -9,7 +9,7 @@ import { LoadingState } from './components/LoadingState'
 import { EmptyState } from './components/EmptyState'
 import { ProductImage } from './components/product/ProductImage'
 import { ProductDetails } from './components/product/ProductDetails'
-import { useCart } from './contexts/CartContext'
+import { useCart } from './hooks/useCart'
 
 type ProductQueryResult = {
   product: Product | null

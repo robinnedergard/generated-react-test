@@ -1,4 +1,4 @@
-import { useCart } from '../../../contexts/CartContext'
+import { useCart } from '../../../hooks/useCart'
 import { CartLine } from '../../cart/CartLine'
 
 export function CartItemsList() {

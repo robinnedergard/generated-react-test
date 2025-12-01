@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import { useAuth } from '../../../contexts/AuthContext'
-import { useCart } from '../../../contexts/CartContext'
+import { useAuth } from '../../../hooks/useAuth'
+import { useCart } from '../../../hooks/useCart'
 
 export function AuthSection() {
   const { isAuthenticated, user, logout } = useAuth()

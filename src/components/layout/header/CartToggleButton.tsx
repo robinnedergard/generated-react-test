@@ -1,4 +1,4 @@
-import { useCart } from '../../../contexts/CartContext'
+import { useCart } from '../../../hooks/useCart'
 
 export function CartToggleButton() {
   const { cartCount, toggleCart } = useCart()
@@ -21,4 +21,3 @@ export function CartToggleButton() {
     </button>
   )
 }
-

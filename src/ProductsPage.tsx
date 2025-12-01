@@ -6,7 +6,7 @@ import { GET_PRODUCTS } from './graphql/queries'
 import type { Product } from './data/products'
 import { LoadingState } from './components/LoadingState'
 import { ErrorMessage } from './components/ErrorMessage'
-import { useCart } from './contexts/CartContext'
+import { useCart } from './hooks/useCart'
 
 type ProductsQueryResult = {
   products: Product[]

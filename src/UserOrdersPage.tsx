@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useQuery } from '@apollo/client/react'
-import { useAuth } from './contexts/AuthContext'
+import { useAuth } from './hooks/useAuth'
 import { MY_ORDERS } from './graphql/queries'
 import { LoadingState } from './components/LoadingState'
 import { EmptyState } from './components/EmptyState'

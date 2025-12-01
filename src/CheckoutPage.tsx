@@ -7,7 +7,7 @@ import { EmptyCartState } from './components/checkout/EmptyCartState'
 import { ShippingAddressForm } from './components/checkout/ShippingAddressForm'
 import { PaymentMethodSelect } from './components/checkout/PaymentMethodSelect'
 import { OrderSummary } from './components/checkout/OrderSummary'
-import { useCart } from './contexts/CartContext'
+import { useCart } from './hooks/useCart'
 
 type CreateCheckoutInput = {
   items: Array<{

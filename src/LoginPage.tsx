@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { useNavigate, Link, useLocation } from 'react-router-dom'
-import { useAuth } from './contexts/AuthContext'
+import { useAuth } from './hooks/useAuth'
 import { FormField } from './components/FormField'
 import { ErrorMessage } from './components/ErrorMessage'
 

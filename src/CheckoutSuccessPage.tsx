@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client/react'
 import { GET_CHECKOUT } from './graphql/queries'
 import { LoadingState } from './components/LoadingState'
 import { EmptyState } from './components/EmptyState'
-import { useCart } from './contexts/CartContext'
+import { useCart } from './hooks/useCart'
 import { currency } from './utils/constants'
 
 type CheckoutQueryResult = {
