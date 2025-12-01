@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.2](https://github.com/robinnedergard/generated-react-test/compare/v1.4.1...v1.4.2) (2025-12-01)
+
+
+### Bug Fixes
+
+* refactoring app, base layout and routing ([#20](https://github.com/robinnedergard/generated-react-test/issues/20)) ([48eaf8b](https://github.com/robinnedergard/generated-react-test/commit/48eaf8bf516ae7e32f740e6c990ac82d6a18c6a3))
+
 ## [1.4.1](https://github.com/robinnedergard/generated-react-test/compare/v1.4.0...v1.4.1) (2025-11-30)
 
 
