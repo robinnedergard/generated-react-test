@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { StarRating } from './StarRating'
-import { ErrorMessage } from '../ErrorMessage'
-import { useAuth } from '../../contexts/AuthContext'
+import { ErrorMessage } from '#src/components/ErrorMessage'
+import { useAuth } from '#src/hooks/useAuth'
 
 function generateCaptcha() {
   const num1 = Math.floor(Math.random() * 10) + 1
@@ -56,10 +56,10 @@ export function ReviewForm({ onSubmit, isSubmitting, error, onError }: ReviewFor
     }
 
     try {
-      await onSubmit({ 
-        name: isAuthenticated ? undefined : name.trim(), 
-        text: text.trim(), 
-        rating 
+      await onSubmit({
+        name: isAuthenticated ? undefined : name.trim(),
+        text: text.trim(),
+        rating,
       })
       // Reset form on success
       setName('')

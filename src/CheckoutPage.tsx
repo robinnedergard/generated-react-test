@@ -2,25 +2,12 @@ import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { useMutation } from '@apollo/client/react'
 import { CREATE_CHECKOUT } from './graphql/queries'
-import type { Product } from './data/products'
 import { ErrorMessage } from './components/ErrorMessage'
-import { PageContainer } from './components/PageContainer'
 import { EmptyCartState } from './components/checkout/EmptyCartState'
 import { ShippingAddressForm } from './components/checkout/ShippingAddressForm'
 import { PaymentMethodSelect } from './components/checkout/PaymentMethodSelect'
 import { OrderSummary } from './components/checkout/OrderSummary'
-
-type CartLineItem = {
-  product: Product
-  quantity: number
-}
-
-type CheckoutPageProps = {
-  cartItems: CartLineItem[]
-  subtotal: number
-  shipping: number
-  total: number
-}
+import { useCart } from './hooks/useCart'
 
 type CreateCheckoutInput = {
   items: Array<{
@@ -53,7 +40,8 @@ type CreateCheckoutMutationResult = {
   }
 }
 
-export default function CheckoutPage({ cartItems, subtotal, shipping, total }: CheckoutPageProps) {
+export default function CheckoutPage() {
+  const { cartItems, subtotal, shipping, total } = useCart()
   const [createCheckout, { loading, error }] =
     useMutation<CreateCheckoutMutationResult>(CREATE_CHECKOUT)
   const [formData, setFormData] = useState({
@@ -131,29 +119,27 @@ export default function CheckoutPage({ cartItems, subtotal, shipping, total }: C
   }
 
   return (
-    <PageContainer backLink={{ to: '/products', label: '← Back to products' }}>
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-12 mt-8">
-        <section>
-          <h1 className="text-4xl mb-8 m-0">Checkout</h1>
+    <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-12 mt-8">
+      <section>
+        <h1 className="text-4xl mb-8 m-0">Checkout</h1>
 
-          <form className="flex flex-col gap-8" onSubmit={handleSubmit}>
-            <ShippingAddressForm formData={formData} onChange={handleChange} />
-            <PaymentMethodSelect value={formData.paymentMethod} onChange={handleChange} />
+        <form className="flex flex-col gap-8" onSubmit={handleSubmit}>
+          <ShippingAddressForm formData={formData} onChange={handleChange} />
+          <PaymentMethodSelect value={formData.paymentMethod} onChange={handleChange} />
 
-            {error && <ErrorMessage message={`Error processing checkout: ${error.message}`} />}
+          {error && <ErrorMessage message={`Error processing checkout: ${error.message}`} />}
 
-            <button
-              type="submit"
-              className="rounded-full px-6 py-3.5 text-sm font-semibold cursor-pointer transition-all bg-orange-500 text-white shadow-lg shadow-orange-500/25 hover:-translate-y-0.5 w-full text-center mt-4 disabled:opacity-60 disabled:cursor-not-allowed"
-              disabled={loading}
-            >
-              {loading ? 'Processing...' : 'Complete Order'}
-            </button>
-          </form>
-        </section>
+          <button
+            type="submit"
+            className="rounded-full px-6 py-3.5 text-sm font-semibold cursor-pointer transition-all bg-orange-500 text-white shadow-lg shadow-orange-500/25 hover:-translate-y-0.5 w-full text-center mt-4 disabled:opacity-60 disabled:cursor-not-allowed"
+            disabled={loading}
+          >
+            {loading ? 'Processing...' : 'Complete Order'}
+          </button>
+        </form>
+      </section>
 
-        <OrderSummary cartItems={cartItems} subtotal={subtotal} shipping={shipping} total={total} />
-      </div>
-    </PageContainer>
+      <OrderSummary cartItems={cartItems} subtotal={subtotal} shipping={shipping} total={total} />
+    </div>
   )
 }

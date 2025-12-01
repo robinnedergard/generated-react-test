@@ -1,5 +1,5 @@
 import type { ChangeEvent } from 'react'
-import { FormField } from '../FormField'
+import { FormField } from '#src/components/FormField'
 
 type ShippingAddressFormProps = {
   formData: {

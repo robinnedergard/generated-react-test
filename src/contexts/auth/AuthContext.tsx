@@ -1,23 +1,6 @@
-import { createContext, useContext, useState, type ReactNode } from 'react'
-
-interface User {
-  id: string
-  email: string
-  firstName: string
-  lastName: string
-}
-
-interface AuthContextType {
-  user: User | null
-  token: string | null
-  login: (email: string, password: string) => Promise<void>
-  register: (email: string, password: string, firstName: string, lastName: string) => Promise<void>
-  logout: () => void
-  isAuthenticated: boolean
-  loading: boolean
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+import { useState, type ReactNode } from 'react'
+import { AuthContext } from './AuthContext.context'
+import type { User } from './AuthContext.types'
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000'
 
@@ -121,13 +104,4 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       {children}
     </AuthContext.Provider>
   )
-}
-
-// eslint-disable-next-line react-refresh/only-export-components
-export function useAuth() {
-  const context = useContext(AuthContext)
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider')
-  }
-  return context
 }

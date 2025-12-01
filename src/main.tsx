@@ -3,8 +3,8 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { ApolloProvider } from '@apollo/client/react'
 import './index.css'
-import App from './App.tsx'
-import { client } from './graphql/client'
+import App from '#src/App.tsx'
+import { client } from '#src/graphql/client'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

@@ -1,4 +1,4 @@
-import type { Product } from '../../data/products'
+import type { Product } from '#src/data/products'
 import { ProductMeta } from './ProductMeta'
 import { ColorSelector } from './ColorSelector'
 import { AddToCartButton } from './AddToCartButton'

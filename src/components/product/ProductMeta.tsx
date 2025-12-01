@@ -1,4 +1,4 @@
-import type { Product } from '../../data/products'
+import type { Product } from '#src/data/products'
 
 const currency = new Intl.NumberFormat('en-US', {
   style: 'currency',

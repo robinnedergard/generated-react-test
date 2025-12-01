@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { EmptyState } from '../EmptyState'
+import { EmptyState } from '#src/components/EmptyState'
 
 export function EmptyCartState() {
   const navigate = useNavigate()

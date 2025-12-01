@@ -1,26 +1,22 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import { useQuery } from '@apollo/client/react'
-import Reviews from './Reviews'
-import { getAverageRating } from './utils/reviews'
-import { GET_PRODUCT, GET_REVIEWS } from './graphql/queries'
-import type { Product } from './data/products'
-import { LoadingState } from './components/LoadingState'
-import { EmptyState } from './components/EmptyState'
-import { PageContainer } from './components/PageContainer'
-import { ProductImage } from './components/product/ProductImage'
-import { ProductDetails } from './components/product/ProductDetails'
-
-type ProductPageProps = {
-  onAddToCart: (productId: string) => void
-  isHighlighted: (productId: string) => boolean
-}
+import Reviews from '#src/Reviews'
+import { getAverageRating } from '#src/utils/reviews'
+import { GET_PRODUCT, GET_REVIEWS } from '#src/graphql/queries'
+import type { Product } from '#src/data/products'
+import { LoadingState } from '#src/components/LoadingState'
+import { EmptyState } from '#src/components/EmptyState'
+import { ProductImage } from '#src/components/product/ProductImage'
+import { ProductDetails } from '#src/components/product/ProductDetails'
+import { useCart } from '#src/hooks/useCart'
 
 type ProductQueryResult = {
   product: Product | null
 }
 
-export default function ProductPage({ onAddToCart, isHighlighted }: ProductPageProps) {
+export default function ProductPage() {
+  const { addToCart, isHighlighted } = useCart()
   const { id } = useParams<{ id: string }>()
   const [selectedColor, setSelectedColor] = useState<string | null>(null)
 
@@ -93,11 +89,11 @@ export default function ProductPage({ onAddToCart, isHighlighted }: ProductPageP
   }
 
   const handleAddToCart = () => {
-    onAddToCart(product.id)
+    addToCart(product.id)
   }
 
   return (
-    <PageContainer backLink={{ to: '/products', label: '← Back to products' }}>
+    <>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
         <ProductImage product={product} />
         <ProductDetails
@@ -111,6 +107,6 @@ export default function ProductPage({ onAddToCart, isHighlighted }: ProductPageP
       </div>
 
       <Reviews productId={product.id} />
-    </PageContainer>
+    </>
   )
 }
