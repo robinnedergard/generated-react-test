@@ -7,7 +7,6 @@ import { GET_PRODUCT, GET_REVIEWS } from './graphql/queries'
 import type { Product } from './data/products'
 import { LoadingState } from './components/LoadingState'
 import { EmptyState } from './components/EmptyState'
-import { PageContainer } from './components/PageContainer'
 import { ProductImage } from './components/product/ProductImage'
 import { ProductDetails } from './components/product/ProductDetails'
 import { useCart } from './contexts/CartContext'
@@ -94,7 +93,7 @@ export default function ProductPage() {
   }
 
   return (
-    <PageContainer backLink={{ to: '/products', label: '← Back to products' }}>
+    <>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
         <ProductImage product={product} />
         <ProductDetails
@@ -108,6 +107,6 @@ export default function ProductPage() {
       </div>
 
       <Reviews productId={product.id} />
-    </PageContainer>
+    </>
   )
 }
