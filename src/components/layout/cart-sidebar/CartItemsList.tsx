@@ -1,5 +1,5 @@
-import { useCart } from '../../../hooks/useCart'
-import { CartLine } from '../../cart/CartLine'
+import { useCart } from '#src/hooks/useCart'
+import { CartLine } from '#src/components/cart/CartLine'
 
 export function CartItemsList() {
   const { cartItems, updateQuantity } = useCart()
@@ -22,4 +22,3 @@ export function CartItemsList() {
     </ul>
   )
 }
-

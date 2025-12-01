@@ -1,6 +1,6 @@
 import { Header } from './header/Header'
 import { CartSidebar } from './cart-sidebar/CartSidebar'
-import { BackLink } from '../BackLink'
+import { BackLink } from '#src/components/BackLink'
 
 type LayoutProps = {
   children: React.ReactNode

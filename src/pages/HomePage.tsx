@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
 import { useQuery } from '@apollo/client/react'
-import { GET_PRODUCTS } from '../graphql/queries'
-import { currency, perks } from '../utils/constants'
-import type { Product } from '../data/products'
-import type { ProductsQueryResult } from '../types'
+import { GET_PRODUCTS } from '#src/graphql/queries'
+import { currency, perks } from '#src/utils/constants'
+import type { Product } from '#src/data/products'
+import type { ProductsQueryResult } from '#src/types'
 
 export function HomePage() {
   const { loading, data } = useQuery<ProductsQueryResult>(GET_PRODUCTS)
@@ -134,4 +134,3 @@ export function HomePage() {
     </>
   )
 }
-

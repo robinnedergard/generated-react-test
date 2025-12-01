@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useQuery } from '@apollo/client/react'
-import ProductCard from './ProductCard'
-import { GET_PRODUCTS } from './graphql/queries'
-import type { Product } from './data/products'
-import { LoadingState } from './components/LoadingState'
-import { ErrorMessage } from './components/ErrorMessage'
-import { useCart } from './hooks/useCart'
+import ProductCard from '#src/ProductCard'
+import { GET_PRODUCTS } from '#src/graphql/queries'
+import type { Product } from '#src/data/products'
+import { LoadingState } from '#src/components/LoadingState'
+import { ErrorMessage } from '#src/components/ErrorMessage'
+import { useCart } from '#src/hooks/useCart'
 
 type ProductsQueryResult = {
   products: Product[]

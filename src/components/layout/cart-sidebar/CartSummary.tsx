@@ -1,4 +1,4 @@
-import { currency } from '../../../utils/constants'
+import { currency } from '#src/utils/constants'
 import { SummaryRow } from './SummaryRow'
 import { CheckoutButton } from './CheckoutButton'
 
@@ -22,4 +22,3 @@ export function CartSummary({ subtotal, shipping, total, onCheckout }: CartSumma
     </div>
   )
 }
-

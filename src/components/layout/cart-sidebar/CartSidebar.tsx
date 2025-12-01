@@ -1,4 +1,4 @@
-import { useCart } from '../../../hooks/useCart'
+import { useCart } from '#src/hooks/useCart'
 import { CartSummary } from './CartSummary'
 import { CartSidebarHeader } from './CartSidebarHeader'
 import { EmptyCartMessage } from './EmptyCartMessage'
@@ -19,9 +19,13 @@ export function CartSidebar() {
       <p className="text-slate-600 m-0">{freeShippingMessage}</p>
       {cartItems.length === 0 ? <EmptyCartMessage /> : <CartItemsList />}
       {cartItems.length > 0 && (
-        <CartSummary subtotal={subtotal} shipping={shipping} total={total} onCheckout={toggleCart} />
+        <CartSummary
+          subtotal={subtotal}
+          shipping={shipping}
+          total={total}
+          onCheckout={toggleCart}
+        />
       )}
     </section>
   )
 }
-

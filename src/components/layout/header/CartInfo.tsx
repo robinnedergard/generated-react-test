@@ -1,4 +1,4 @@
-import { useCart } from '../../../hooks/useCart'
+import { useCart } from '#src/hooks/useCart'
 
 export function CartInfo() {
   const { cartCount } = useCart()
@@ -12,4 +12,3 @@ export function CartInfo() {
     </div>
   )
 }
-

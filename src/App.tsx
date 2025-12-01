@@ -1,12 +1,12 @@
 import { useMemo } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { useQuery } from '@apollo/client/react'
-import { AuthProvider } from './contexts/auth/AuthContext'
-import { CartProvider } from './contexts/cart/CartContext'
-import { Layout } from './components/layout/Layout'
-import { GET_PRODUCTS } from './graphql/queries'
-import { routes } from './routes'
-import type { ProductsQueryResult } from './types'
+import { AuthProvider } from '#src/contexts/auth/AuthContext'
+import { CartProvider } from '#src/contexts/cart/CartContext'
+import { Layout } from '#src/components/layout/Layout'
+import { GET_PRODUCTS } from '#src/graphql/queries'
+import { routes } from '#src/routes'
+import type { ProductsQueryResult } from '#src/types'
 
 function AppRoutes() {
   return (

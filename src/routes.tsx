@@ -1,12 +1,12 @@
-import { ProtectedRoute } from './components/ProtectedRoute'
-import { HomePage } from './pages/HomePage'
-import ProductsPage from './ProductsPage'
-import ProductPage from './ProductPage'
-import CheckoutPage from './CheckoutPage'
-import CheckoutSuccessPage from './CheckoutSuccessPage'
-import LoginPage from './LoginPage'
-import RegisterPage from './RegisterPage'
-import UserOrdersPage from './UserOrdersPage'
+import { ProtectedRoute } from '#src/components/ProtectedRoute'
+import { HomePage } from '#src/pages/HomePage'
+import ProductsPage from '#src/ProductsPage'
+import ProductPage from '#src/ProductPage'
+import CheckoutPage from '#src/CheckoutPage'
+import CheckoutSuccessPage from '#src/CheckoutSuccessPage'
+import LoginPage from '#src/LoginPage'
+import RegisterPage from '#src/RegisterPage'
+import UserOrdersPage from '#src/UserOrdersPage'
 
 export const routes = [
   {

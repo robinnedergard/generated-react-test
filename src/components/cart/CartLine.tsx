@@ -1,5 +1,5 @@
-import { currency } from '../../utils/constants'
-import type { CartLineItem } from '../../types'
+import { currency } from '#src/utils/constants'
+import type { CartLineItem } from '#src/types'
 
 type CartLineProps = {
   item: CartLineItem
@@ -74,4 +74,3 @@ export function CartLine({ item, onIncrement, onDecrement, onRemove }: CartLineP
     </li>
   )
 }
-

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
-import type { Product } from '../../data/products'
-import type { CartLineItem } from '../../types'
-import { currency, freeShippingThreshold, flatShippingRate } from '../../utils/constants'
+import type { Product } from '#src/data/products'
+import type { CartLineItem } from '#src/types'
+import { currency, freeShippingThreshold, flatShippingRate } from '#src/utils/constants'
 import { CartContext } from './CartContext.context'
 import type { CartContextType } from './CartContext.types'
 
@@ -133,4 +133,3 @@ export function CartProvider({ children, products }: { children: ReactNode; prod
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>
 }
-

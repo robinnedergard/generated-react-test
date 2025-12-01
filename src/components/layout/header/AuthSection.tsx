@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import { useAuth } from '../../../hooks/useAuth'
-import { useCart } from '../../../hooks/useCart'
+import { useAuth } from '#src/hooks/useAuth'
+import { useCart } from '#src/hooks/useCart'
 
 export function AuthSection() {
   const { isAuthenticated, user, logout } = useAuth()
@@ -37,4 +37,3 @@ export function AuthSection() {
     </Link>
   )
 }
-

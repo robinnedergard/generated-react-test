@@ -1,4 +1,4 @@
-import type { CartLineItem } from '../../types'
+import type { CartLineItem } from '#src/types'
 
 export interface CartContextType {
   cartItems: CartLineItem[]
@@ -14,4 +14,3 @@ export interface CartContextType {
   clearCart: () => void
   isHighlighted: (productId: string) => boolean
 }
-
