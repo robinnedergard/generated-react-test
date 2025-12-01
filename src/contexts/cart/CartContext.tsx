@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import type { Product } from '#src/data/products'
 import type { CartLineItem } from '#src/types'
 import { currency, freeShippingThreshold, flatShippingRate } from '#src/utils/constants'
@@ -102,9 +102,9 @@ export function CartProvider({ children, products }: { children: ReactNode; prod
 
   const toggleCart = () => setIsCartOpen((open) => !open)
 
-  const clearCart = () => {
+  const clearCart = useCallback(() => {
     setCart({})
-  }
+  }, [])
 
   const isHighlighted = (productId: string) => highlightedProduct?.id === productId
 
