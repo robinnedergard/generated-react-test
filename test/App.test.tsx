@@ -4,8 +4,8 @@ import { render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { MockedProvider } from '@apollo/client/testing/react'
 import userEvent from '@testing-library/user-event'
-import App from './App'
-import { GET_PRODUCTS } from './graphql/queries'
+import App from '#src/App'
+import { GET_PRODUCTS } from '#src/graphql/queries'
 
 // Mock data for products query
 const mockProducts = [

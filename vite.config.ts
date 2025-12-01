@@ -8,11 +8,16 @@ export default defineConfig({
   resolve: {
     alias: {
       '#src': path.resolve(__dirname, './src'),
+      '#test': path.resolve(__dirname, './test'),
     },
   },
   test: {
     environment: 'jsdom',
     globals: true,
     setupFiles: './vitest.setup.ts',
+    include: ['test/**/*.{test,spec}.{ts,tsx}'],
+    typecheck: {
+      tsconfig: './tsconfig.test.json',
+    },
   },
 })
