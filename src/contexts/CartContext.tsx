@@ -1,9 +1,32 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import type { Product } from '../data/products'
 import type { CartLineItem } from '../types'
 import { currency, freeShippingThreshold, flatShippingRate } from '../utils/constants'
 
-export function useCart(products: Product[]) {
+interface CartContextType {
+  cartItems: CartLineItem[]
+  cartCount: number
+  subtotal: number
+  shipping: number
+  total: number
+  freeShippingMessage: string
+  isCartOpen: boolean
+  toggleCart: () => void
+  updateQuantity: (productId: string, updater: (current: number) => number) => void
+  addToCart: (productId: string) => void
+  clearCart: () => void
+  isHighlighted: (productId: string) => boolean
+}
+
+const CartContext = createContext<CartContextType | undefined>(undefined)
+
+export function CartProvider({
+  children,
+  products,
+}: {
+  children: ReactNode
+  products: Product[]
+}) {
   const [cart, setCart] = useState<Record<string, number>>({})
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [highlightedProduct, setHighlightedProduct] = useState<{
@@ -114,7 +137,7 @@ export function useCart(products: Product[]) {
     }
   }, [])
 
-  return {
+  const value: CartContextType = {
     cartItems,
     cartCount,
     subtotal,
@@ -128,4 +151,15 @@ export function useCart(products: Product[]) {
     clearCart,
     isHighlighted,
   }
+
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>
 }
+
+export function useCart() {
+  const context = useContext(CartContext)
+  if (context === undefined) {
+    throw new Error('useCart must be used within a CartProvider')
+  }
+  return context
+}
+

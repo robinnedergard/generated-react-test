@@ -12,45 +12,17 @@ import { ProtectedRoute } from './components/ProtectedRoute'
 import { Layout } from './components/layout/Layout'
 import { HomePage } from './pages/HomePage'
 import { AuthProvider } from './contexts/AuthContext'
+import { CartProvider } from './contexts/CartContext'
 import { GET_PRODUCTS } from './graphql/queries'
-import { useCart } from './hooks/useCart'
 import type { ProductsQueryResult } from './types'
 
-function App() {
-  const { data: productsData } = useQuery<ProductsQueryResult>(GET_PRODUCTS)
-  const products = useMemo(() => productsData?.products || [], [productsData?.products])
-
-  const {
-    cartItems,
-    cartCount,
-    subtotal,
-    shipping,
-    total,
-    freeShippingMessage,
-    isCartOpen,
-    toggleCart,
-    updateQuantity,
-    addToCart,
-    clearCart,
-    isHighlighted,
-  } = useCart(products)
-
+function AppRoutes() {
   return (
     <Routes>
       <Route
         path="/"
         element={
-          <Layout
-            cartItems={cartItems}
-            cartCount={cartCount}
-            subtotal={subtotal}
-            shipping={shipping}
-            total={total}
-            freeShippingMessage={freeShippingMessage}
-            isCartOpen={isCartOpen}
-            toggleCart={toggleCart}
-            updateQuantity={updateQuantity}
-          >
+          <Layout>
             <HomePage />
           </Layout>
         }
@@ -58,94 +30,39 @@ function App() {
       <Route
         path="/products"
         element={
-          <Layout
-            cartItems={cartItems}
-            cartCount={cartCount}
-            subtotal={subtotal}
-            shipping={shipping}
-            total={total}
-            freeShippingMessage={freeShippingMessage}
-            isCartOpen={isCartOpen}
-            toggleCart={toggleCart}
-            updateQuantity={updateQuantity}
-          >
-            <ProductsPage addToCart={addToCart} isHighlighted={isHighlighted} />
+          <Layout>
+            <ProductsPage />
           </Layout>
         }
       />
       <Route
         path="/product/:id"
         element={
-          <Layout
-            cartItems={cartItems}
-            cartCount={cartCount}
-            subtotal={subtotal}
-            shipping={shipping}
-            total={total}
-            freeShippingMessage={freeShippingMessage}
-            isCartOpen={isCartOpen}
-            toggleCart={toggleCart}
-            updateQuantity={updateQuantity}
-          >
-            <ProductPage onAddToCart={addToCart} isHighlighted={isHighlighted} />
+          <Layout>
+            <ProductPage />
           </Layout>
         }
       />
       <Route
         path="/checkout"
         element={
-          <Layout
-            cartItems={cartItems}
-            cartCount={cartCount}
-            subtotal={subtotal}
-            shipping={shipping}
-            total={total}
-            freeShippingMessage={freeShippingMessage}
-            isCartOpen={isCartOpen}
-            toggleCart={toggleCart}
-            updateQuantity={updateQuantity}
-          >
-            <CheckoutPage
-              cartItems={cartItems}
-              subtotal={subtotal}
-              shipping={shipping}
-              total={total}
-            />
+          <Layout>
+            <CheckoutPage />
           </Layout>
         }
       />
       <Route
         path="/checkout/:id/success"
         element={
-          <Layout
-            cartItems={cartItems}
-            cartCount={cartCount}
-            subtotal={subtotal}
-            shipping={shipping}
-            total={total}
-            freeShippingMessage={freeShippingMessage}
-            isCartOpen={isCartOpen}
-            toggleCart={toggleCart}
-            updateQuantity={updateQuantity}
-          >
-            <CheckoutSuccessPage onClearCart={clearCart} />
+          <Layout>
+            <CheckoutSuccessPage />
           </Layout>
         }
       />
       <Route
         path="/login"
         element={
-          <Layout
-            cartItems={cartItems}
-            cartCount={cartCount}
-            subtotal={subtotal}
-            shipping={shipping}
-            total={total}
-            freeShippingMessage={freeShippingMessage}
-            isCartOpen={isCartOpen}
-            toggleCart={toggleCart}
-            updateQuantity={updateQuantity}
-          >
+          <Layout>
             <LoginPage />
           </Layout>
         }
@@ -153,17 +70,7 @@ function App() {
       <Route
         path="/register"
         element={
-          <Layout
-            cartItems={cartItems}
-            cartCount={cartCount}
-            subtotal={subtotal}
-            shipping={shipping}
-            total={total}
-            freeShippingMessage={freeShippingMessage}
-            isCartOpen={isCartOpen}
-            toggleCart={toggleCart}
-            updateQuantity={updateQuantity}
-          >
+          <Layout>
             <RegisterPage />
           </Layout>
         }
@@ -171,17 +78,7 @@ function App() {
       <Route
         path="/account/orders"
         element={
-          <Layout
-            cartItems={cartItems}
-            cartCount={cartCount}
-            subtotal={subtotal}
-            shipping={shipping}
-            total={total}
-            freeShippingMessage={freeShippingMessage}
-            isCartOpen={isCartOpen}
-            toggleCart={toggleCart}
-            updateQuantity={updateQuantity}
-          >
+          <Layout>
             <ProtectedRoute>
               <UserOrdersPage />
             </ProtectedRoute>
@@ -192,10 +89,19 @@ function App() {
   )
 }
 
+function App() {
+  return <AppRoutes />
+}
+
 function AppWithAuth() {
+  const { data: productsData } = useQuery<ProductsQueryResult>(GET_PRODUCTS)
+  const products = useMemo(() => productsData?.products || [], [productsData?.products])
+
   return (
     <AuthProvider>
-      <App />
+      <CartProvider products={products}>
+        <App />
+      </CartProvider>
     </AuthProvider>
   )
 }

@@ -1,22 +1,26 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
+import { useCart } from '../../contexts/CartContext'
 import { CartLine } from '../cart/CartLine'
 import { currency } from '../../utils/constants'
-import type { LayoutProps } from '../../types'
 
-export function Layout({
-  children,
-  cartItems,
-  cartCount,
-  subtotal,
-  shipping,
-  total,
-  freeShippingMessage,
-  isCartOpen,
-  toggleCart,
-  updateQuantity,
-}: LayoutProps) {
+type LayoutProps = {
+  children: React.ReactNode
+}
+
+export function Layout({ children }: LayoutProps) {
   const { isAuthenticated, user, logout } = useAuth()
+  const {
+    cartItems,
+    cartCount,
+    subtotal,
+    shipping,
+    total,
+    freeShippingMessage,
+    isCartOpen,
+    toggleCart,
+    updateQuantity,
+  } = useCart()
 
   return (
     <div className="max-w-[1200px] mx-auto px-5 lg:px-12 py-12 pb-16 flex flex-col gap-12">

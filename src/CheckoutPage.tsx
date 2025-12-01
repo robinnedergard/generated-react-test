@@ -2,25 +2,13 @@ import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { useMutation } from '@apollo/client/react'
 import { CREATE_CHECKOUT } from './graphql/queries'
-import type { Product } from './data/products'
 import { ErrorMessage } from './components/ErrorMessage'
 import { PageContainer } from './components/PageContainer'
 import { EmptyCartState } from './components/checkout/EmptyCartState'
 import { ShippingAddressForm } from './components/checkout/ShippingAddressForm'
 import { PaymentMethodSelect } from './components/checkout/PaymentMethodSelect'
 import { OrderSummary } from './components/checkout/OrderSummary'
-
-type CartLineItem = {
-  product: Product
-  quantity: number
-}
-
-type CheckoutPageProps = {
-  cartItems: CartLineItem[]
-  subtotal: number
-  shipping: number
-  total: number
-}
+import { useCart } from './contexts/CartContext'
 
 type CreateCheckoutInput = {
   items: Array<{
@@ -53,7 +41,8 @@ type CreateCheckoutMutationResult = {
   }
 }
 
-export default function CheckoutPage({ cartItems, subtotal, shipping, total }: CheckoutPageProps) {
+export default function CheckoutPage() {
+  const { cartItems, subtotal, shipping, total } = useCart()
   const [createCheckout, { loading, error }] =
     useMutation<CreateCheckoutMutationResult>(CREATE_CHECKOUT)
   const [formData, setFormData] = useState({

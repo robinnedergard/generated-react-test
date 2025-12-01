@@ -7,17 +7,14 @@ import type { Product } from './data/products'
 import { LoadingState } from './components/LoadingState'
 import { ErrorMessage } from './components/ErrorMessage'
 import { PageContainer } from './components/PageContainer'
-
-type ProductsPageProps = {
-  addToCart: (productId: string) => void
-  isHighlighted: (productId: string) => boolean
-}
+import { useCart } from './contexts/CartContext'
 
 type ProductsQueryResult = {
   products: Product[]
 }
 
-export default function ProductsPage({ addToCart, isHighlighted }: ProductsPageProps) {
+export default function ProductsPage() {
+  const { addToCart, isHighlighted } = useCart()
   const location = useLocation()
   const { loading, error, data } = useQuery<ProductsQueryResult>(GET_PRODUCTS)
 

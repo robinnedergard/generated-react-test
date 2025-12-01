@@ -10,17 +10,14 @@ import { EmptyState } from './components/EmptyState'
 import { PageContainer } from './components/PageContainer'
 import { ProductImage } from './components/product/ProductImage'
 import { ProductDetails } from './components/product/ProductDetails'
-
-type ProductPageProps = {
-  onAddToCart: (productId: string) => void
-  isHighlighted: (productId: string) => boolean
-}
+import { useCart } from './contexts/CartContext'
 
 type ProductQueryResult = {
   product: Product | null
 }
 
-export default function ProductPage({ onAddToCart, isHighlighted }: ProductPageProps) {
+export default function ProductPage() {
+  const { addToCart, isHighlighted } = useCart()
   const { id } = useParams<{ id: string }>()
   const [selectedColor, setSelectedColor] = useState<string | null>(null)
 
@@ -93,7 +90,7 @@ export default function ProductPage({ onAddToCart, isHighlighted }: ProductPageP
   }
 
   const handleAddToCart = () => {
-    onAddToCart(product.id)
+    addToCart(product.id)
   }
 
   return (

@@ -5,15 +5,8 @@ import { GET_CHECKOUT } from './graphql/queries'
 import { LoadingState } from './components/LoadingState'
 import { EmptyState } from './components/EmptyState'
 import { PageContainer } from './components/PageContainer'
-
-const currency = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-})
-
-type CheckoutSuccessPageProps = {
-  onClearCart?: () => void
-}
+import { useCart } from './contexts/CartContext'
+import { currency } from './utils/constants'
 
 type CheckoutQueryResult = {
   checkout: {
@@ -39,7 +32,8 @@ type CheckoutQueryResult = {
   } | null
 }
 
-export default function CheckoutSuccessPage({ onClearCart }: CheckoutSuccessPageProps) {
+export default function CheckoutSuccessPage() {
+  const { clearCart } = useCart()
   const { id } = useParams<{ id: string }>()
   const { loading, data } = useQuery<CheckoutQueryResult>(GET_CHECKOUT, {
     variables: { id: id || '' },
@@ -48,10 +42,10 @@ export default function CheckoutSuccessPage({ onClearCart }: CheckoutSuccessPage
 
   useEffect(() => {
     // Clear cart when checkout is successful
-    if (data?.checkout && onClearCart) {
-      onClearCart()
+    if (data?.checkout) {
+      clearCart()
     }
-  }, [data?.checkout, onClearCart])
+  }, [data?.checkout, clearCart])
 
   // Scroll to top on mount
   useEffect(() => {
