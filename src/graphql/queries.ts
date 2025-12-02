@@ -132,3 +132,104 @@ export const DELETE_REVIEW = gql`
     deleteReview(id: $id)
   }
 `
+
+export const GET_ADMIN_PRODUCTS = gql`
+  query AdminProducts($category: String) {
+    adminProducts(category: $category) {
+      id
+      name
+      category
+      price
+      image
+      description
+      badge
+      featured
+      colors
+      createdAt
+      updatedAt
+    }
+  }
+`
+
+export const CREATE_PRODUCT = gql`
+  mutation CreateProduct($createProductInput: CreateProductInput!) {
+    createProduct(createProductInput: $createProductInput) {
+      id
+      name
+      category
+      price
+      image
+      description
+      badge
+      featured
+      colors
+      createdAt
+      updatedAt
+    }
+  }
+`
+
+export const UPDATE_PRODUCT = gql`
+  mutation UpdateProduct($id: ID!, $updateProductInput: CreateProductInput!) {
+    updateProduct(id: $id, updateProductInput: $updateProductInput) {
+      id
+      name
+      category
+      price
+      image
+      description
+      badge
+      featured
+      colors
+      createdAt
+      updatedAt
+    }
+  }
+`
+
+export const DELETE_PRODUCT = gql`
+  mutation DeleteProduct($id: ID!) {
+    removeProduct(id: $id)
+  }
+`
+
+export const GET_ADMIN_CHECKOUTS = gql`
+  query AdminCheckouts($status: CheckoutStatus) {
+    adminCheckouts(status: $status) {
+      id
+      status
+      total
+      subtotal
+      tax
+      shipping
+      items {
+        productId
+        name
+        quantity
+        price
+      }
+      shippingAddress {
+        firstName
+        lastName
+        address
+        city
+        state
+        zipCode
+        country
+      }
+      paymentMethod
+      createdAt
+      updatedAt
+    }
+  }
+`
+
+export const UPDATE_CHECKOUT_STATUS = gql`
+  mutation UpdateCheckoutStatus($id: ID!, $status: CheckoutStatus!) {
+    updateCheckoutStatus(id: $id, status: $status) {
+      id
+      status
+      updatedAt
+    }
+  }
+`
