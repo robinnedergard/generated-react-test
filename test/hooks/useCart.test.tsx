@@ -15,7 +15,6 @@ const mockProducts: Product[] = [
     badge: undefined,
     featured: false,
     colors: ['Red'],
-    rating: 4.5,
   },
 ]
 
