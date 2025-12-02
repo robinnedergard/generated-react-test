@@ -114,6 +114,19 @@ export const GET_REVIEWS = gql`
   }
 `
 
+export const GET_REVIEWS_BY_PRODUCT_IDS = gql`
+  query GetReviewsByProductIds($productIds: [ID!]!) {
+    reviewsByProductIds(productIds: $productIds) {
+      id
+      productId
+      text
+      rating
+      userName
+      createdAt
+    }
+  }
+`
+
 export const CREATE_REVIEW = gql`
   mutation CreateReview($createReviewInput: CreateReviewInput!) {
     createReview(createReviewInput: $createReviewInput) {
