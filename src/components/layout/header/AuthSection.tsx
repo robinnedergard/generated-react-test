@@ -6,9 +6,9 @@ import { usePermissions } from '#src/hooks/usePermissions'
 export function AuthSection() {
   const { isAuthenticated, user, logout } = useAuth()
   const { isCartOpen, toggleCart } = useCart()
-  const { hasPermission } = usePermissions()
+  const { hasAdminAccess } = usePermissions()
 
-  const canViewAdmin = hasPermission('admin:read')
+  const canViewAdmin = hasAdminAccess()
 
   if (isAuthenticated) {
     return (

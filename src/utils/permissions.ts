@@ -34,19 +34,9 @@ export function hasAllPermissions(
 }
 
 /**
- * Check if user has admin access (any admin-related permission)
+ * Check if user has admin access (requires admin:read permission)
  */
 export function hasAdminAccess(userPermissions: UserPermission[] | undefined): boolean {
   if (!userPermissions) return false
-  const adminPermissions: UserPermission[] = [
-    'admin:read',
-    'products:read',
-    'products:write',
-    'orders:read',
-    'orders:write',
-    'permissions:read',
-    'permissions:write',
-  ]
-  return hasAnyPermission(userPermissions, adminPermissions)
+  return hasPermission(userPermissions, 'admin:read')
 }
-
