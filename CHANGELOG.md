@@ -1,5 +1,12 @@
 # Changelog
 
+# [1.5.0](https://github.com/robinnedergard/generated-react-test/compare/v1.4.2...v1.5.0) (2025-12-02)
+
+
+### Features
+
+* admin page ([#21](https://github.com/robinnedergard/generated-react-test/issues/21)) ([2a731f1](https://github.com/robinnedergard/generated-react-test/commit/2a731f1d978035e1a299e5ae401726a518c29809))
+
 ## [1.4.2](https://github.com/robinnedergard/generated-react-test/compare/v1.4.1...v1.4.2) (2025-12-01)
 
 
