@@ -69,6 +69,7 @@ export const routes = [
         <AdminDashboardPage />
       </AdminProtectedRoute>
     ),
+    backLink: { to: '/', label: '← Back to main site' },
   },
   {
     path: '/admin/products',
