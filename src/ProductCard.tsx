@@ -8,12 +8,15 @@ type ProductCardProps = {
   product: Product
   onAdd: () => void
   isHighlighted: boolean
+  averageRating: number | null
 }
 
-export default function ProductCard({ product, onAdd, isHighlighted }: ProductCardProps) {
-  // Use product.rating from database (which should be kept up to date)
-  const averageRating = product.rating || null
-
+export default function ProductCard({
+  product,
+  onAdd,
+  isHighlighted,
+  averageRating,
+}: ProductCardProps) {
   return (
     <Link
       to={`/product/${product.id}`}

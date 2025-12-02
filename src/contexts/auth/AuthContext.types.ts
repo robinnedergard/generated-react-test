@@ -1,8 +1,18 @@
+export type UserPermission =
+  | 'admin:read'
+  | 'products:read'
+  | 'products:write'
+  | 'orders:read'
+  | 'orders:write'
+  | 'permissions:read'
+  | 'permissions:write'
+
 export interface User {
   id: string
   email: string
   firstName: string
   lastName: string
+  permissions?: UserPermission[]
 }
 
 export interface AuthContextType {

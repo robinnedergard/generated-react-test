@@ -12,10 +12,10 @@ type LayoutProps = {
 
 export function Layout({ children, backLink }: LayoutProps) {
   return (
-    <div className="max-w-[1200px] mx-auto px-5 lg:px-12 py-12 pb-16 flex flex-col gap-12">
+    <div className="max-w-[1200px] mx-auto px-5 lg:px-12 py-12 pb-16 flex flex-col gap-6">
       <Header />
       <CartSidebar />
-      <div className="px-8 py-16 flex flex-col gap-12">
+      <div className="px-8 py-8 flex flex-col gap-12">
         {backLink && <BackLink to={backLink.to} label={backLink.label} />}
         {children}
       </div>

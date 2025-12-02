@@ -7,6 +7,5 @@ export type Product = {
   description: string
   badge?: string
   featured?: boolean
-  rating: number
   colors: string[]
 }
