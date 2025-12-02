@@ -1,8 +1,12 @@
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
+import { useQuery } from '@apollo/client/react'
 import { type Product } from './data/products'
 import { ProductImage } from './components/product/ProductImage'
 import { ProductMeta } from './components/product/ProductMeta'
 import { AddToCartButton } from './components/product/AddToCartButton'
+import { GET_REVIEWS } from './graphql/queries'
+import { getAverageRating } from './utils/reviews'
 
 type ProductCardProps = {
   product: Product
@@ -11,8 +15,28 @@ type ProductCardProps = {
 }
 
 export default function ProductCard({ product, onAdd, isHighlighted }: ProductCardProps) {
-  // Use product.rating from database (which should be kept up to date)
-  const averageRating = product.rating || null
+  // Fetch reviews for this product to calculate average rating
+  const { data: reviewsData } = useQuery<{
+    reviews: Array<{
+      id: string
+      productId: string
+      userName: string
+      text: string
+      rating: number
+      createdAt: string
+    }>
+  }>(GET_REVIEWS, {
+    variables: { productId: product.id },
+    skip: !product.id,
+  })
+
+  // Calculate average rating from reviews
+  const averageRating = useMemo(() => {
+    if (reviewsData?.reviews) {
+      return getAverageRating(reviewsData.reviews)
+    }
+    return null
+  }, [reviewsData])
 
   return (
     <Link
