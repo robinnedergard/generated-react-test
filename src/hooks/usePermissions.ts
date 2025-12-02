@@ -10,10 +10,10 @@ import {
 
 export function usePermissions() {
   const { user } = useAuth()
-  const permissions = user?.permissions || []
 
-  return useMemo(
-    () => ({
+  return useMemo(() => {
+    const permissions = user?.permissions || []
+    return {
       permissions,
       hasPermission: (permission: UserPermission) => hasPermission(permissions, permission),
       hasAnyPermission: (permissionList: UserPermission[]) =>
@@ -21,8 +21,6 @@ export function usePermissions() {
       hasAllPermissions: (permissionList: UserPermission[]) =>
         hasAllPermissions(permissions, permissionList),
       hasAdminAccess: () => hasAdminAccess(permissions),
-    }),
-    [permissions],
-  )
+    }
+  }, [user?.permissions])
 }
-

@@ -65,7 +65,7 @@ export default function AdminOrdersPage() {
       await updateStatus({
         variables: { id, status: newStatus },
       })
-    } catch (err) {
+    } catch {
       alert('Failed to update order status')
     }
   }
@@ -79,7 +79,7 @@ export default function AdminOrdersPage() {
         <div>
           <select
             value={statusFilter || ''}
-            onChange={(e) => setStatusFilter(e.target.value as CheckoutStatus | null || null)}
+            onChange={(e) => setStatusFilter((e.target.value as CheckoutStatus | null) || null)}
             className="px-4 py-2 border border-slate-200 rounded-lg"
           >
             <option value="">All Statuses</option>
@@ -147,7 +147,8 @@ export default function AdminOrdersPage() {
                   <ul className="list-disc pl-5 mt-1">
                     {checkout.items.map((item, idx) => (
                       <li key={idx}>
-                        {item.name} × {item.quantity} - {currency.format(item.price * item.quantity)}
+                        {item.name} × {item.quantity} -{' '}
+                        {currency.format(item.price * item.quantity)}
                       </li>
                     ))}
                   </ul>
@@ -177,4 +178,3 @@ export default function AdminOrdersPage() {
     </div>
   )
 }
-

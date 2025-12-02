@@ -46,7 +46,7 @@ export default function AdminProductsPage() {
     if (!confirm('Are you sure you want to delete this product?')) return
     try {
       await deleteProduct({ variables: { id } })
-    } catch (err) {
+    } catch {
       alert('Failed to delete product')
     }
   }
@@ -137,4 +137,3 @@ export default function AdminProductsPage() {
     </div>
   )
 }
-
