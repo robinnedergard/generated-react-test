@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useCallback } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useQuery } from '@apollo/client/react'
 import ProductCard from '#src/ProductCard'
@@ -37,7 +37,7 @@ export default function ProductsPage() {
     Record<string, ReviewsByProductIdsResult['reviewsByProductIds']>
   >({})
 
-  useEffect(() => {
+  const fetchReviews = useCallback(() => {
     if (products.length === 0) {
       return
     }
@@ -49,6 +49,7 @@ export default function ProductsPage() {
       .query<ReviewsByProductIdsResult>({
         query: GET_REVIEWS_BY_PRODUCT_IDS,
         variables: { productIds },
+        fetchPolicy: 'network-only', // Always fetch fresh data
       })
       .then((result) => {
         if (!result.data) {
@@ -73,6 +74,23 @@ export default function ProductsPage() {
         setReviewsMap(map)
       })
   }, [products])
+
+  useEffect(() => {
+    fetchReviews()
+  }, [fetchReviews])
+
+  // Listen for review added event to refetch reviews
+  useEffect(() => {
+    const handleReviewAdded = () => {
+      fetchReviews()
+    }
+
+    window.addEventListener('reviewAdded', handleReviewAdded)
+
+    return () => {
+      window.removeEventListener('reviewAdded', handleReviewAdded)
+    }
+  }, [fetchReviews])
 
   // Calculate average ratings for each product
   const averageRatings = useMemo(() => {
